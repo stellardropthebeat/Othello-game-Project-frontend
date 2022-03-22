@@ -11,20 +11,32 @@ export default new Vuex.Store({
     role: "",
   },
   getters: {},
-  mutations: {},
-  actions: {
-    setLoggedInUser(state, payload) {
-      console.log(payload);
-      state.isLoggedIn = payload.loggedIn;
-      state.username = payload.username;
-      state.name = payload.name;
-      state.role = payload.role;
+  mutations: {
+    setIsLoggedIn(state, isLoggedIn){
+      state.isLoggedIn = isLoggedIn;
     },
-    clearUser(state) {
-      state.isLoggedIn = false;
-      state.username = null;
-      state.name = null;
-      state.role = "";
+    setUsername(state, username){
+      state.username = username;
+    },
+    setName(state, name){
+      state.name = name;
+    },
+    setRole(state, role){
+      state.role = role;
+    },
+  },
+  actions: {
+    setLoggedInUser({commit}, payload) {
+      commit("setIsLoggedIn", payload.loggedIn);
+      commit("setUsername", payload.username);
+      commit("setName", payload.name);
+      commit("setRole", payload.role);
+    },
+    clearUser({commit}) {
+      commit("setIsLoggedIn", false);
+      commit("setUsername", null);
+      commit("setName", null);
+      commit("setRole", "");
     },
   },
   modules: {},
