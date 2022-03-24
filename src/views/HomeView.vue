@@ -9,6 +9,9 @@
         <router-link to="/about">Go to About</router-link>
       </li>
       <li>
+        <router-link to="/game">Go to Game</router-link>
+      </li>
+      <li>
         <router-link to="/login">Go to login</router-link>
       </li>
     </ul>
