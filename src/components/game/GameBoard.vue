@@ -42,9 +42,11 @@ export default {
       }
     },
     put(r, c) {
-      store.dispatch("putBoard", {'row':r, 'col': c})
-      this.count();
-      this.$forceUpdate()
+      if (store.state.board[r][c] === "") {
+        store.dispatch("putBoard", { 'row': r, 'col': c })
+        this.count();
+        this.$forceUpdate()
+      }
     },
     black(r, c) {
       return store.state.board[r][c] === "b"
