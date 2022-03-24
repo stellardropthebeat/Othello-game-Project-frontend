@@ -9,6 +9,17 @@ export default new Vuex.Store({
     username: null,
     name: null,
     role: "",
+    board: [
+      ["", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", ""],
+      ["", "", "", "w", "b", "", "", ""],
+      ["", "", "", "b", "w", "", "", ""],
+      ["", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", ""],
+      ["", "", "", "", "", "", "", ""]
+    ],
+    isBlack: true,
   },
   getters: {},
   mutations: {
@@ -24,6 +35,15 @@ export default new Vuex.Store({
     setRole(state, role){
       state.role = role;
     },
+    putBoard(state, position) {
+      if (state.isBlack) {
+        console.log(position.row, position.col)
+              state.board[position.row][position.col] = "b";
+            } else {
+              state.board[position.row][position.col] = "w";
+            }
+            state.isBlack = !state.isBlack;
+    },
   },
   actions: {
     setLoggedInUser({commit}, payload) {
@@ -37,6 +57,9 @@ export default new Vuex.Store({
       commit("setUsername", null);
       commit("setName", null);
       commit("setRole", "");
+    },
+    putBoard({commit}, position) {
+      commit('putBoard', position)
     },
   },
   modules: {},

@@ -1,15 +1,18 @@
 <template>
   <v-container class="container">
+    <game-deco />
     <game-board />
   </v-container>
 </template>
 
 <script>
 import GameBoard from "@/components/game/GameBoard";
+import GameDeco from "@/components/game/GameDeco"
 
 export default {
   components: {
-    GameBoard
+    GameBoard,
+    GameDeco
   }
 };
 </script>

@@ -14,8 +14,10 @@ export default {
 
 <style scoped>
 .score {
-  margin-bottom: 20px;
   color: rgb(90, 89, 88);
+  width: fit-content;
+  position: relative;
+  left: 46.5%;
 }
 h1 {
   display: inline;

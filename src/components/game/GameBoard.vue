@@ -2,7 +2,7 @@
   <div>
     <game-score :blacks="blacks" :whites="whites" />
     <div class="container">
-      <div class="row" v-for="(v, row) in board" :key="row">
+      <div class="row" v-for="(v, row) in $store.state.board" :key="row">
         <div
           class="cell"
           v-for="(vv, col) in v"
@@ -19,31 +19,17 @@
 
 <script>
 import GameScore from "./GameScore.vue";
-
+import store from "@/store";
 export default {
   components: { GameScore },
   data() {
     return {
       isBlack: true,
-      board: [
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""]
-      ],
       blacks: 2,
       whites: 2
     };
   },
   mounted() {
-    this.board[3][3] = "w";
-    this.board[3][4] = "b";
-    this.board[4][3] = "b";
-    this.board[4][4] = "w";
     this.$forceUpdate();
   },
   methods: {
@@ -51,28 +37,20 @@ export default {
       this.blacks = 0;
       this.whites = 0;
       for (let r = 0; r < 8; r++) {
-        this.blacks += this.board[r].filter((disc) => disc === "b").length;
-        this.whites += this.board[r].filter((disc) => disc === "w").length;
+        this.blacks += store.state.board[r].filter((disc) => disc === "b").length;
+        this.whites += store.state.board[r].filter((disc) => disc === "w").length;
       }
     },
     put(r, c) {
-      console.log(r, c);
-      if (this.board[r][c] === "") {
-        if (this.isBlack) {
-          this.board[r][c] = "b";
-        } else {
-          this.board[r][c] = "w";
-        }
-        this.isBlack = !this.isBlack;
-        this.count();
-        this.$forceUpdate();
-      }
+      store.dispatch("putBoard", {'row':r, 'col': c})
+      this.count();
+      this.$forceUpdate()
     },
     black(r, c) {
-      return this.board[r][c] === "b";
+      return store.state.board[r][c] === "b"
     },
     white(r, c) {
-      return this.board[r][c] === "w";
+      return store.state.board[r][c] === "w"
     }
   }
 };
@@ -84,8 +62,8 @@ export default {
   background-color: rgb(216, 216, 216);
   border: solid 1px white;
   padding: 5px;
-  width: 60px;
-  height: 60px;
+  width: 55px;
+  height: 55px;
 }
 
 .dot {
@@ -108,12 +86,12 @@ export default {
 
 .container {
   margin: auto;
-  width: 500px;
+  width: 470px;
 }
 
 .row {
   display: grid;
   grid-template-columns: repeat(8, auto);
-  margin: 0;
+  margin: 0%;
 }
 </style>
