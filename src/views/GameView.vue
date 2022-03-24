@@ -16,7 +16,7 @@ export default {
 
 <style>
 .container {
-  margin-left: 15%;
-  margin-right: 15%;
+  /*margin-left: 15%;*/
+  /*margin-right: 15%;*/
 }
 </style>

@@ -1,10 +1,17 @@
 <template>
-  <div class="container">
+  <div>
     <game-score :blacks="blacks" :whites="whites" />
-    <div class="grid">
-      <div class="cell" v-for="i in 64" :key="i" @click="put(i)">
-        <div v-if="black(i)" class="b dot"></div>
-        <div v-if="white(i)" class="w dot"></div>
+    <div class="container">
+      <div class="row" v-for="(v, row) in board" :key="row">
+        <div
+          class="cell"
+          v-for="(vv, col) in v"
+          :key="col"
+          @click="put(row, col)"
+        >
+                    <div v-if="black(row, col)" class="b dot"></div>
+                    <div v-if="white(row, col)" class="w dot"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -18,59 +25,67 @@ export default {
   data() {
     return {
       isBlack: true,
-      board: Array(64),
+      board: [
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""]
+      ],
       blacks: 2,
       whites: 2
     };
   },
   mounted() {
-    this.board[28] = "w";
-    this.board[29] = "b";
-    this.board[36] = "b";
-    this.board[37] = "w";
+    this.board[3][3] = "w";
+    this.board[3][4] = "b";
+    this.board[4][3] = "b";
+    this.board[4][4] = "w";
     this.$forceUpdate();
   },
   methods: {
     count() {
-      this.blacks = this.board.filter((disc) => disc === "b").length;
-      this.whites = this.board.filter((disc) => disc === "w").length;
+      this.blacks = 0;
+      this.whites = 0;
+      for (let r = 0; r < 8; r++) {
+        this.blacks += this.board[r].filter((disc) => disc === "b").length;
+        this.whites += this.board[r].filter((disc) => disc === "w").length;
+      }
     },
-    put(i) {
-      console.log(i);
-      if (this.board[i] === undefined) {
+    put(r, c) {
+      console.log(r, c);
+      if (this.board[r][c] === "") {
         if (this.isBlack) {
-          this.board[i] = "b";
+          this.board[r][c] = "b";
         } else {
-          this.board[i] = "w";
+          this.board[r][c] = "w";
         }
         this.isBlack = !this.isBlack;
         this.count();
         this.$forceUpdate();
       }
     },
-    black(i) {
-      return this.board[i] === "b";
+    black(r, c) {
+      return this.board[r][c] === "b";
     },
-    white(i) {
-      return this.board[i] === "w";
+    white(r, c) {
+      return this.board[r][c] === "w";
     }
   }
 };
 </script>
 
 <style scoped>
-.grid {
-  display: inline-grid;
-  grid-template-columns: repeat(8, 55px);
-  grid-template-rows: repeat(8, 55px);
-  border: 4px solid black;
-}
-
 .cell {
   display: inline-block;
   background-color: rgb(216, 216, 216);
   border: solid 1px white;
   padding: 5px;
+  width: 60px;
+  height: 60px;
 }
 
 .dot {
@@ -80,7 +95,7 @@ export default {
   align-content: center;
   height: 40px;
   width: 40px;
-  box-shadow: 0.5px 0.5px;
+  box-shadow: 1px 1px;
 }
 
 .b {
@@ -89,5 +104,16 @@ export default {
 
 .w {
   background-color: white;
+}
+
+.container {
+  margin: auto;
+  width: 500px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(8, auto);
+  margin: 0;
 }
 </style>
