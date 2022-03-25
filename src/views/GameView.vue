@@ -1,5 +1,5 @@
 <template>
-  <v-container class="container">
+  <v-container>
     <game-deco />
     <game-board />
   </v-container>
@@ -16,10 +16,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.container {
-  /*margin-left: 15%;*/
-  /*margin-right: 15%;*/
-}
-</style>

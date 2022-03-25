@@ -33,7 +33,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="blue-grey lighten-4">
       <router-view />
     </v-main>
   </v-app>
@@ -45,6 +45,7 @@ export default {
 
   data: () => ({
     //
-  }),
+  })
 };
 </script>
+

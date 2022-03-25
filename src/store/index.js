@@ -35,12 +35,14 @@ export default new Vuex.Store({
     setRole(state, role) {
       state.role = role;
     },
-    putBoard(state, position) {
+    async putBoard(state, position) {
       if (state.isBlack) {
         state.board[position.row][position.col] = "b";
       } else {
         state.board[position.row][position.col] = "w";
       }
+      let response = await Vue.axios.post("/api/post-board", {"isBlack": state.isBlack, "board":state.board})
+      console.log(response.data)
       state.isBlack = !state.isBlack;
     }
   },

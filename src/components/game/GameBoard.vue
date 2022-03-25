@@ -9,8 +9,8 @@
           :key="col"
           @click="put(row, col)"
         >
-                    <div v-if="black(row, col)" class="b dot"></div>
-                    <div v-if="white(row, col)" class="w dot"></div>
+          <div v-if="black(row, col)" class="b dot"></div>
+          <div v-if="white(row, col)" class="w dot"></div>
         </div>
       </div>
     </div>
@@ -20,6 +20,8 @@
 <script>
 import GameScore from "./GameScore.vue";
 import store from "@/store";
+import Vue from "vue";
+
 export default {
   components: { GameScore },
   data() {
@@ -29,7 +31,13 @@ export default {
       whites: 2
     };
   },
-  mounted() {
+  async mounted() {
+    console.log("mounted");
+    let response = await Vue.axios.post("/api/post-board", {
+      "isBlack": store.state.isBlack,
+      "board": store.state.board
+    });
+    console.log(response);
     this.$forceUpdate();
   },
   methods: {
@@ -41,18 +49,18 @@ export default {
         this.whites += store.state.board[r].filter((disc) => disc === "w").length;
       }
     },
-    put(r, c) {
+    async put(r, c) {
       if (store.state.board[r][c] === "") {
-        store.dispatch("putBoard", { 'row': r, 'col': c })
+        store.dispatch("putBoard", { "row": r, "col": c });
         this.count();
-        this.$forceUpdate()
+        this.$forceUpdate();
       }
     },
     black(r, c) {
-      return store.state.board[r][c] === "b"
+      return store.state.board[r][c] === "b";
     },
     white(r, c) {
-      return store.state.board[r][c] === "w"
+      return store.state.board[r][c] === "w";
     }
   }
 };
@@ -88,12 +96,12 @@ export default {
 
 .container {
   margin: auto;
-  width: 470px;
+  width: 460px;
 }
 
 .row {
   display: grid;
   grid-template-columns: repeat(8, auto);
-  margin: 0%;
+  margin: 0;
 }
 </style>
