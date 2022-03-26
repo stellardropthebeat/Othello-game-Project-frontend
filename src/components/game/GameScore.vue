@@ -1,8 +1,8 @@
 <template>
   <div class="score">
-    <h1 class="btext">{{ blacks }}</h1>
+    <h1 class="b">{{ blacks }}</h1>
     <h1>&nbsp; : &nbsp;</h1>
-    <h1 class="wtext">{{ whites }}</h1>
+    <h1 class="w">{{ whites }}</h1>
   </div>
 </template>
 
@@ -17,15 +17,16 @@ export default {
   color: rgb(90, 89, 88);
   width: fit-content;
   position: relative;
-  left: 46.5%;
+  margin: auto;
+  padding: 5px;
 }
 h1 {
   display: inline;
 }
-.btext {
+.b {
   color: black;
 }
-.wtext {
+.w {
   color: white;
 }
 </style>

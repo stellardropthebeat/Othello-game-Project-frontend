@@ -33,7 +33,6 @@ export default {
     };
   },
   async mounted() {
-    console.log("mounted");
     let response = await Vue.axios.post("/api/post-board", {
       "isBlack": store.state.isBlack,
       "board": store.state.board
@@ -114,6 +113,8 @@ export default {
   width: fit-content;
   display: grid;
   grid-template-rows: repeat(8, 55px);
+  padding: 0 ;
+  /*border: black 2px solid;*/
 }
 
 .row {
