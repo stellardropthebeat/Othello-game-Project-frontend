@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div class="half-circle left"><h3>Your Turn</h3></div>
+    <div class="half-circle left"></div>
+    <div class="half-circle left border-left" v-if="this.$store.state.isBlack"><h3>Your Turn</h3></div>
     <div class="half-circle right"></div>
+    <div class="half-circle right border-right" v-if="!this.$store.state.isBlack"><h3 >Your Turn</h3></div>
   </div>
 </template>
 
@@ -14,35 +16,46 @@
   height: 400px;
   /*z-index: -100;*/
 
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+  /*-webkit-box-sizing: border-box;*/
+  /*-moz-box-sizing: border-box;*/
+  /*box-sizing: border-box;*/
 
-  filter: alpha(opacity=80);
-  -moz-opacity: 0.8;
-  opacity: 0.8;
+  filter: alpha(opacity=90);
+  -moz-opacity: 0.9;
+  opacity: 0.9;
 }
 
 .left {
   left: 0;
   border-bottom-right-radius: 200px;
   border-top-right-radius: 200px;
-  /*border-left: 0;*/
   background-color: black;
-  border: 10px solid rgb(97, 210, 214);
-  border-left: 0;
 }
 
 .right {
   right: 0;
   border-bottom-left-radius: 200px;
   border-top-left-radius: 200px;
-  border-right: 0;
   background-color: white;
 }
 .left h3 {
   color: white;
   position: relative;
   top: 50%;
+  left: 10%;
+}
+.right > h3 {
+  color: #282828;
+  position: relative;
+  top: 50%;
+  left: 50%;
+}
+.border-left{
+  border: 10px solid aqua;
+  border-left: 0;
+}
+.border-right{
+  border: 10px solid aqua;
+  border-right: 0;
 }
 </style>

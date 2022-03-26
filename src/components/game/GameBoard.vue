@@ -115,7 +115,9 @@ export default {
 
 .container {
   margin: auto;
-  width: 460px;
+  width: fit-content;
+  display: grid;
+  grid-template-rows: repeat(8, 55px);
 }
 
 .row {
