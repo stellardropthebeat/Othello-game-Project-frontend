@@ -28,8 +28,8 @@ export default {
   data() {
     return {
       isBlack: true,
-      blacks: 2,
-      whites: 2
+      blacks: 0,
+      whites: 0
     };
   },
   async mounted() {
@@ -39,6 +39,7 @@ export default {
       "board": store.state.board
     });
     store.state.possibleMoves = response.data.possibleMoves;
+    this.count()
   },
   methods: {
     count() {
@@ -49,7 +50,7 @@ export default {
         this.whites += store.state.board[r].filter((disc) => disc === "w").length;
       }
     },
-    async put(r, c) {
+    put(r, c) {
       let move = this.isValidMove(r, c);
       if (store.state.board[r][c] === "" && move[0]) {
         store.dispatch("putBoard", { "row": r, "col": c, "move": move[1]});
@@ -64,16 +65,42 @@ export default {
       return store.state.board[r][c] === "w";
     },
     isValidMove(r, c) {
-      let moves = Object.keys(store.state.possibleMoves);
-      let ret = [false, ""];
-      moves.forEach((function(elem) {
-        // This comes out as string [r, c]
-        let p_row = elem[1];
-        let p_col = elem[4];
-        if (r == p_row && c == p_col) {
-          ret = [true, elem];
+      if (store.state.possibleMoves === null ||  store.state.possibleMoves === undefined) {
+        if (this.isGameOver()) {
+          if (this.blacks > this.whites) {
+            alert("White wins!!")
+          } else {
+            alert("Black wins!!")
+          }
+          store.dispatch("resetBoard");
+          this.$router.push("/");
+        } else {
+          store.state.isBlack = !store.state.isBlack;
         }
-      }));
+      }
+      else {
+        let moves = Object.keys(store.state.possibleMoves);
+        let ret = [false, ""];
+        moves.forEach((function(elem) {
+          // This comes out as string [r, c]
+          let p_row = elem[1];
+          let p_col = elem[4];
+          if (r == p_row && c == p_col) {
+            ret = [true, elem];
+          }
+        }));
+        return ret
+      }
+    },
+    isGameOver() {
+      let ret = true
+      for (let r = 0; r < 8; r++) {
+        for(let c=0; c<8; c++) {
+          if (store.state.board[r][c] === "") {
+            ret = false
+          }
+        }
+      }
       return ret
     }
   }
@@ -81,13 +108,26 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  margin: auto;
+  width: fit-content;
+  display: grid;
+  grid-template-rows: repeat(8, 55px);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(8, auto);
+  margin: 0;
+}
 .cell {
   display: inline-block;
   background-color: rgb(216, 216, 216);
   border: solid 1px white;
-  padding: 5px;
+  padding: 6px;
   width: 55px;
   height: 55px;
+  overflow: hidden;
 }
 
 .dot {
@@ -111,16 +151,5 @@ export default {
 
 .w {
   background-color: white;
-}
-
-.container {
-  margin: auto;
-  width: 460px;
-}
-
-.row {
-  display: grid;
-  grid-template-columns: repeat(8, auto);
-  margin: 0;
 }
 </style>

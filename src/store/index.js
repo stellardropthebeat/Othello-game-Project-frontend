@@ -41,14 +41,30 @@ export default new Vuex.Store({
       if (state.isBlack) {
         color = "b";
       } else {
-        color = "w"
+        color = "w";
       }
-        state.board[position.row][position.col] = color;
-        let toFlip = state.possibleMoves[position.move];
-        toFlip.forEach((pos) => state.board[pos[0]][pos[1]] = color);
+      state.board[position.row][position.col] = color;
+      let toFlip = state.possibleMoves[position.move];
+      toFlip.forEach((pos) => state.board[pos[0]][pos[1]] = color);
       state.isBlack = !state.isBlack;
-      let response = await Vue.axios.post("/api/post-board", {"isBlack": state.isBlack, "board":state.board})
+      let response = await Vue.axios.post("/api/post-board", { "isBlack": state.isBlack, "board": state.board });
+      if (response.data.possibleMoves === undefined) {
+        state.isBlack = !state.isBlack;
+        response = await Vue.axios.post("/api/post-board", { "isBlack": state.isBlack, "board": state.board });
+      }
       state.possibleMoves = response.data.possibleMoves;
+    },
+    resetBoard(state) {
+      state.board = [
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "w", "b", "", "", ""],
+        ["", "", "", "b", "w", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""]
+      ];
     }
   },
   actions: {
@@ -66,6 +82,9 @@ export default new Vuex.Store({
     },
     putBoard({ commit }, position) {
       commit("putBoard", position);
+    },
+    resetBoard({ commit }) {
+      commit("resetBoard");
     }
   },
   modules: {}
