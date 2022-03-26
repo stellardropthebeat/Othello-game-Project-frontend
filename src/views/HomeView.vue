@@ -14,6 +14,9 @@
       <li>
         <router-link to="/login">Go to login</router-link>
       </li>
+      <li>
+        <router-link to="/lobby">Go to lobby</router-link>
+      </li>
     </ul>
   </v-container>
 </template>
