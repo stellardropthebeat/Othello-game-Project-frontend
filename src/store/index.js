@@ -65,6 +65,8 @@ export default new Vuex.Store({
         ["", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", ""]
       ];
+      state.isBlack = true;
+      state.possibleMoves = [];
     }
   },
   actions: {
