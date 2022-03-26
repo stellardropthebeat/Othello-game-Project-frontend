@@ -28,8 +28,8 @@ export default {
   data() {
     return {
       isBlack: true,
-      blacks: 2,
-      whites: 2
+      blacks: 0,
+      whites: 0
     };
   },
   async mounted() {
@@ -39,6 +39,7 @@ export default {
       "board": store.state.board
     });
     store.state.possibleMoves = response.data.possibleMoves;
+    this.count()
   },
   methods: {
     count() {
@@ -81,13 +82,26 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  margin: auto;
+  width: fit-content;
+  display: grid;
+  grid-template-rows: repeat(8, 55px);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(8, auto);
+  margin: 0;
+}
 .cell {
   display: inline-block;
   background-color: rgb(216, 216, 216);
   border: solid 1px white;
-  padding: 5px;
+  padding: 6px;
   width: 55px;
   height: 55px;
+  overflow: hidden;
 }
 
 .dot {
@@ -111,18 +125,5 @@ export default {
 
 .w {
   background-color: white;
-}
-
-.container {
-  margin: auto;
-  width: fit-content;
-  display: grid;
-  grid-template-rows: repeat(8, 55px);
-}
-
-.row {
-  display: grid;
-  grid-template-columns: repeat(8, auto);
-  margin: 0;
 }
 </style>

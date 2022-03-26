@@ -16,10 +16,6 @@
   height: 400px;
   /*z-index: -100;*/
 
-  /*-webkit-box-sizing: border-box;*/
-  /*-moz-box-sizing: border-box;*/
-  /*box-sizing: border-box;*/
-
   filter: alpha(opacity=90);
   -moz-opacity: 0.9;
   opacity: 0.9;
@@ -44,8 +40,8 @@
   top: 50%;
   left: 10%;
 }
-.right > h3 {
-  color: #282828;
+.right h3 {
+  color: #363636;
   position: relative;
   top: 50%;
   left: 50%;
