@@ -48,6 +48,7 @@ export default new Vuex.Store({
       toFlip.forEach((pos) => state.board[pos[0]][pos[1]] = color);
       state.isBlack = !state.isBlack;
       let response = await Vue.axios.post("/api/post-board", { "isBlack": state.isBlack, "board": state.board });
+      // if there is no possible move skip a turn
       if (response.data.possibleMoves === undefined) {
         state.isBlack = !state.isBlack;
         response = await Vue.axios.post("/api/post-board", { "isBlack": state.isBlack, "board": state.board });

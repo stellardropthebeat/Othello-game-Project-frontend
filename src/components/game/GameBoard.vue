@@ -33,12 +33,12 @@ export default {
     };
   },
   async mounted() {
+    this.count()
     let response = await Vue.axios.post("/api/post-board", {
       "isBlack": store.state.isBlack,
       "board": store.state.board
     });
     store.state.possibleMoves = response.data.possibleMoves;
-    this.count()
   },
   methods: {
     count() {
@@ -51,7 +51,7 @@ export default {
     },
     put(r, c) {
       let move = this.isValidMove(r, c);
-      if (store.state.board[r][c] === "" && move[0]) {
+      if (move[0] && store.state.board[r][c] === "") {
         store.dispatch("putBoard", { "row": r, "col": c, "move": move[1]});
         this.count();
         this.$forceUpdate();
@@ -64,23 +64,19 @@ export default {
       return store.state.board[r][c] === "w";
     },
     isValidMove(r, c) {
-      if (store.state.possibleMoves === null ||  store.state.possibleMoves === undefined) {
-        if (this.isGameOver()) {
+      let ret = [false, ""];
+      if (store.state.possibleMoves === undefined) {
           this.count();
           if (this.whites > this.blacks) {
-            alert("White wins!!")
+            alert("White won!!")
           } else {
-            alert("Black wins!!")
+            alert("Black won!!")
           }
-          store.dispatch("resetBoard");
           this.$router.push("/");
-        } else {
-          store.state.isBlack = !store.state.isBlack;
-        }
+          store.dispatch("resetBoard");
       }
       else {
         let moves = Object.keys(store.state.possibleMoves);
-        let ret = [false, ""];
         moves.forEach((function(elem) {
           // This comes out as string [r, c]
           let p_row = elem[1];
@@ -92,17 +88,6 @@ export default {
         return ret
       }
     },
-    isGameOver() {
-      let ret = true
-      for (let r = 0; r < 8; r++) {
-        for(let c=0; c<8; c++) {
-          if (store.state.board[r][c] === "") {
-            ret = false
-          }
-        }
-      }
-      return ret
-    }
   }
 };
 </script>
