@@ -67,7 +67,8 @@ export default {
     isValidMove(r, c) {
       if (store.state.possibleMoves === null ||  store.state.possibleMoves === undefined) {
         if (this.isGameOver()) {
-          if (this.blacks > this.whites) {
+          this.count();
+          if (this.whites > this.blacks) {
             alert("White wins!!")
           } else {
             alert("Black wins!!")
