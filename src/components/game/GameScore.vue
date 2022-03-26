@@ -26,6 +26,6 @@ h1 {
   color: black;
 }
 .wtext {
-  /*color: white;*/
+  color: white;
 }
 </style>

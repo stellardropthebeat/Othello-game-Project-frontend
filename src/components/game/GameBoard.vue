@@ -11,6 +11,7 @@
         >
           <div v-if="black(row, col)" class="b dot"></div>
           <div v-if="white(row, col)" class="w dot"></div>
+          <div v-if="isValidMove(row, col)[0] " class="move dot"></div>
         </div>
       </div>
     </div>
@@ -37,8 +38,7 @@ export default {
       "isBlack": store.state.isBlack,
       "board": store.state.board
     });
-    console.log(response);
-    this.$forceUpdate();
+    store.state.possibleMoves = response.data.possibleMoves;
   },
   methods: {
     count() {
@@ -50,8 +50,9 @@ export default {
       }
     },
     async put(r, c) {
-      if (store.state.board[r][c] === "") {
-        store.dispatch("putBoard", { "row": r, "col": c });
+      let move = this.isValidMove(r, c);
+      if (store.state.board[r][c] === "" && move[0]) {
+        store.dispatch("putBoard", { "row": r, "col": c, "move": move[1]});
         this.count();
         this.$forceUpdate();
       }
@@ -61,6 +62,19 @@ export default {
     },
     white(r, c) {
       return store.state.board[r][c] === "w";
+    },
+    isValidMove(r, c) {
+      let moves = Object.keys(store.state.possibleMoves);
+      let ret = [false, ""];
+      moves.forEach((function(elem) {
+        // This comes out as string [r, c]
+        let p_row = elem[1];
+        let p_col = elem[4];
+        if (r == p_row && c == p_col) {
+          ret = [true, elem];
+        }
+      }));
+      return ret
     }
   }
 };
@@ -84,6 +98,11 @@ export default {
   height: 40px;
   width: 40px;
   box-shadow: 1px 1px;
+}
+
+.move {
+  border: #807d7d solid 1px;
+  box-shadow: 0 0;
 }
 
 .b {

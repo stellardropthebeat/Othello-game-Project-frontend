@@ -19,7 +19,8 @@ export default new Vuex.Store({
       ["", "", "", "", "", "", "", ""],
       ["", "", "", "", "", "", "", ""]
     ],
-    isBlack: true
+    isBlack: true,
+    possibleMoves: []
   },
   getters: {},
   mutations: {
@@ -36,14 +37,18 @@ export default new Vuex.Store({
       state.role = role;
     },
     async putBoard(state, position) {
+      let color = "";
       if (state.isBlack) {
-        state.board[position.row][position.col] = "b";
+        color = "b";
       } else {
-        state.board[position.row][position.col] = "w";
+        color = "w"
       }
-      let response = await Vue.axios.post("/api/post-board", {"isBlack": state.isBlack, "board":state.board})
-      console.log(response.data)
+        state.board[position.row][position.col] = color;
+        let toFlip = state.possibleMoves[position.move];
+        toFlip.forEach((pos) => state.board[pos[0]][pos[1]] = color);
       state.isBlack = !state.isBlack;
+      let response = await Vue.axios.post("/api/post-board", {"isBlack": state.isBlack, "board":state.board})
+      state.possibleMoves = response.data.possibleMoves;
     }
   },
   actions: {
