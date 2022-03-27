@@ -53,27 +53,29 @@ export default {
       return store.state.board[i] === "w";
     },
     isValidMove(i) {
+      this.isGameOver()
       let ret = [false, ""];
-      if (store.state.possibleMoves === undefined) {
-        this.count();
-        if (this.whites > this.blacks) {
-          alert("White won!!");
-        } else {
-          alert("Black won!!");
+      let moves = Object.keys(store.state.possibleMoves);
+      moves.forEach((function(move) {
+        // move is key of map(String)
+        if (i == move) {
+          ret = [true, move];
         }
-        this.$router.push("/");
-        store.dispatch("resetBoard");
-      } else {
-        let moves = Object.keys(store.state.possibleMoves);
-        moves.forEach((function(move) {
-          // move is key of map(String)
-          if (i == move) {
-            ret = [true, move];
+      }));
+      return ret;
+    },
+      isGameOver() {
+        if (store.state.possibleMoves === undefined) {
+          this.count();
+          if (this.whites > this.blacks) {
+            alert("White won!!");
+          } else {
+            alert("Black won!!");
           }
-        }));
-        return ret;
+          this.$router.push("/");
+          store.dispatch("resetBoard");
+        }
       }
-    }
   }
 };
 </script>
@@ -91,7 +93,8 @@ export default {
   display: inline-block;
   background-color: rgb(216, 216, 216);
   border: solid 1px white;
-  padding: 5px;
+  padding: 6px;
+  overflow: hidden;
 }
 
 .dot {
