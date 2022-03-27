@@ -1,18 +1,11 @@
 <template>
-  <div>
+  <div class="container">
     <game-score :blacks="blacks" :whites="whites" />
-    <div class="container">
-      <div class="row" v-for="(v, row) in $store.state.board" :key="row">
-        <div
-          class="cell"
-          v-for="(vv, col) in v"
-          :key="col"
-          @click="put(row, col)"
-        >
-          <div v-if="black(row, col)" class="b dot"></div>
-          <div v-if="white(row, col)" class="w dot"></div>
-          <div v-if="isValidMove(row, col)[0] " class="move dot"></div>
-        </div>
+    <div class="grid">
+      <div class="cell" v-for="(n, i) in 64" :key="i" @click="put(i)">
+        <div v-if="black(i)" class="b dot"></div>
+        <div v-if="white(i)" class="w dot"></div>
+        <div v-if="isValidMove(i)[0] " class="move dot"></div>
       </div>
     </div>
   </div>
@@ -33,7 +26,7 @@ export default {
     };
   },
   async mounted() {
-    this.count()
+    this.count();
     let response = await Vue.axios.post("/api/post-board", {
       "isBlack": store.state.isBlack,
       "board": store.state.board
@@ -42,79 +35,63 @@ export default {
   },
   methods: {
     count() {
-      this.blacks = 0;
-      this.whites = 0;
-      for (let r = 0; r < 8; r++) {
-        this.blacks += store.state.board[r].filter((disc) => disc === "b").length;
-        this.whites += store.state.board[r].filter((disc) => disc === "w").length;
-      }
+      this.blacks = store.state.board.filter((disc) => disc === "b").length;
+      this.whites = store.state.board.filter((disc) => disc === "w").length;
     },
-    put(r, c) {
-      let move = this.isValidMove(r, c);
-      if (move[0] && store.state.board[r][c] === "") {
-        store.dispatch("putBoard", { "row": r, "col": c, "move": move[1]});
+    put(i) {
+      let move = this.isValidMove(i);
+      if (move[0] && store.state.board[i] === "") {
+        store.dispatch("putBoard", { "i": i, "move": move[1] });
         this.count();
         this.$forceUpdate();
       }
     },
-    black(r, c) {
-      return store.state.board[r][c] === "b";
+    black(i) {
+      return store.state.board[i] === "b";
     },
-    white(r, c) {
-      return store.state.board[r][c] === "w";
+    white(i) {
+      return store.state.board[i] === "w";
     },
-    isValidMove(r, c) {
+    isValidMove(i) {
       let ret = [false, ""];
       if (store.state.possibleMoves === undefined) {
-          this.count();
-          if (this.whites > this.blacks) {
-            alert("White won!!")
-          } else {
-            alert("Black won!!")
-          }
-          this.$router.push("/");
-          store.dispatch("resetBoard");
-      }
-      else {
+        this.count();
+        if (this.whites > this.blacks) {
+          alert("White won!!");
+        } else {
+          alert("Black won!!");
+        }
+        this.$router.push("/");
+        store.dispatch("resetBoard");
+      } else {
         let moves = Object.keys(store.state.possibleMoves);
-        moves.forEach((function(elem) {
-          // This comes out as string [r, c]
-          let p_row = elem[1];
-          let p_col = elem[4];
-          if (r == p_row && c == p_col) {
-            ret = [true, elem];
+        moves.forEach((function(move) {
+          // move is key of map(String)
+          if (i == move) {
+            ret = [true, move];
           }
         }));
-        return ret
+        return ret;
       }
-    },
+    }
   }
 };
 </script>
 
 <style scoped>
-.container {
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 55px);
+  grid-template-rows: repeat(8, 55px);
   margin: auto;
   width: fit-content;
-  display: grid;
-  grid-template-rows: repeat(8, 55px);
-  padding: 0 ;
-  /*border: black 2px solid;*/
 }
 
-.row {
-  display: grid;
-  grid-template-columns: repeat(8, auto);
-  margin: 0;
-}
 .cell {
   display: inline-block;
   background-color: rgb(216, 216, 216);
   border: solid 1px white;
-  padding: 6px;
-  width: 55px;
-  height: 55px;
-  overflow: hidden;
+  padding: 5px;
 }
 
 .dot {

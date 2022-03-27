@@ -10,14 +10,14 @@ export default new Vuex.Store({
     name: null,
     role: "",
     board: [
-      ["", "", "", "", "", "", "", ""],
-      ["", "", "", "", "", "", "", ""],
-      ["", "", "", "", "", "", "", ""],
-      ["", "", "", "w", "b", "", "", ""],
-      ["", "", "", "b", "w", "", "", ""],
-      ["", "", "", "", "", "", "", ""],
-      ["", "", "", "", "", "", "", ""],
-      ["", "", "", "", "", "", "", ""]
+      "", "", "", "", "", "", "", "",
+      "", "", "", "", "", "", "", "",
+      "", "", "", "", "", "", "", "",
+      "", "", "", "w", "b", "", "", "",
+      "", "", "", "b", "w", "", "", "",
+      "", "", "", "", "", "", "", "",
+      "", "", "", "", "", "", "", "",
+      "", "", "", "", "", "", "", ""
     ],
     isBlack: true,
     possibleMoves: []
@@ -43,9 +43,9 @@ export default new Vuex.Store({
       } else {
         color = "w";
       }
-      state.board[position.row][position.col] = color;
+      state.board[position.i] = color;
       let toFlip = state.possibleMoves[position.move];
-      toFlip.forEach((pos) => state.board[pos[0]][pos[1]] = color);
+      toFlip.forEach((pos) => state.board[pos] = color);
       state.isBlack = !state.isBlack;
       let response = await Vue.axios.post("/api/post-board", { "isBlack": state.isBlack, "board": state.board });
       // if there is no possible move skip a turn
@@ -57,14 +57,14 @@ export default new Vuex.Store({
     },
     resetBoard(state) {
       state.board = [
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "w", "b", "", "", ""],
-        ["", "", "", "b", "w", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""]
+        "", "", "", "", "", "", "", "",
+        "", "", "", "", "", "", "", "",
+        "", "", "", "", "", "", "", "",
+        "", "", "", "w", "b", "", "", "",
+        "", "", "", "b", "w", "", "", "",
+        "", "", "", "", "", "", "", "",
+        "", "", "", "", "", "", "", "",
+        "", "", "", "", "", "", "", ""
       ];
       state.isBlack = true;
       state.possibleMoves = [];
