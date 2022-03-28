@@ -2,20 +2,29 @@
   <v-container>
     <template>
       <v-form ref="form" v-model="valid" lazy-validation>
-        <v-text-field
-            v-model="username"
-            :rules="usernameRules"
-            label="Username"
-            required
-        ></v-text-field>
+        <v-col>
+          <v-text-field
+              v-model="username"
+              :rules="usernameRules"
+              label="Username"
+              required
+              filled
+              rounded
+              dense
+          ></v-text-field>
 
-        <v-text-field
-            type="paswword"
-            v-model="password"
-            :rules="passwordRules"
-            label="Password"
-            required
-        ></v-text-field>
+          <v-text-field
+              type="paswword"
+              v-model="password"
+              :rules="passwordRules"
+              label="Password"
+              required
+              filled
+              rounded
+              dense
+          ></v-text-field>
+        </v-col>
+
 
         <v-btn
             :disabled="!valid"
