@@ -57,7 +57,7 @@ export default {
       let ret = [false, ""];
       let moves = Object.keys(store.state.possibleMoves);
       moves.forEach((function(move) {
-        // move is key of map(String)
+        // move is key of map(String), i is int
         if (i == move) {
           ret = [true, move];
         }
