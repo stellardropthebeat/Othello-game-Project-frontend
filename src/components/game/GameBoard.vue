@@ -36,8 +36,7 @@ export default {
       "", "", "", "", "", "", "", ""
     ],
     possibleMoves: [],
-    connected: false,
-    toPlace: -1
+    connected: false
   }),
   async mounted() {
     let response = await Vue.axios.post("/api/post-board", {
@@ -65,7 +64,7 @@ export default {
             this.possibleMoves = JSON.parse(tick.body)["possibleMoves"];
             this.blacks = JSON.parse(tick.body)["blacks"];
             this.whites = JSON.parse(tick.body)["whites"];
-            this.isBlack= JSON.parse(tick.body)["isBlack"];
+            this.isBlack = JSON.parse(tick.body)["isBlack"];
           });
         },
         error => {
@@ -76,18 +75,15 @@ export default {
     },
     send(toPlace) {
 
-      if ( this.possibleMoves[toPlace] === undefined) {
-        this.isBlack = !this.isBlack
+      if (this.possibleMoves[toPlace] === undefined) {
+        this.isBlack = !this.isBlack;
       }
-
       if (this.stompClient && this.stompClient.connected) {
         const obj = { board: this.board, isBlack: this.isBlack, turn: -1, toFlip: this.possibleMoves[toPlace] };
         this.stompClient.send("/app/board", JSON.stringify(obj), {});
       }
-
-      console.log(this.possibleMoves);
     },
-    put(i) {
+    async put(i) {
       let move = this.isValidMove(i);
       let toPlace = move[1];
       if (move[0] && this.board[i] === "") {
@@ -99,11 +95,13 @@ export default {
           color = "w";
         }
         this.board[toPlace] = color;
-        this.send(toPlace)
-
-
+        this.send(toPlace);
 
         this.$forceUpdate();
+
+        // give sometime to update board UI
+        await this.sleep(40);
+        this.isGameOver();
       }
     },
     black(i) {
@@ -122,7 +120,23 @@ export default {
         }
       }));
       return ret;
+    },
+    isGameOver() {
+      if (!this.board.includes("")) {
+        if (this.blacks > this.whites) {
+          alert("Black Won!!!");
+        } else if (this.whites > this.blacks) {
+          alert("White Won!!!");
+        } else {
+          alert("Draw!");
+        }
+        this.$router.replace("/");
+      }
+    },
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
+
   }
 };
 </script>
