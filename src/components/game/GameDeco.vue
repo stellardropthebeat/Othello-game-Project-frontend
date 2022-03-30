@@ -1,5 +1,7 @@
 <template>
   <div>
+<!--    TODO: change to isBlack && isYourTurn   -->
+    
     <div class="half-circle left border-left" v-if="this.$store.state.isBlack"><h3>Your Turn</h3></div>
     <div class="half-circle left" v-else ></div>
     <div class="half-circle right border-right" v-if="!this.$store.state.isBlack"><h3 >Your Turn</h3></div>

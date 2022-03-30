@@ -18,14 +18,13 @@ import Vue from "vue";
 
 export default {
   components: { GameScore },
-  data() {
-    return {
-      isBlack: true,
-      blacks: 0,
-      whites: 0
-    };
-  },
+  data: () => ({
+    isBlack: true,
+    blacks: 0,
+    whites: 0
+  }),
   async mounted() {
+    await store.dispatch("resetBoard");
     this.count();
     let response = await Vue.axios.post("/api/post-board", {
       "isBlack": store.state.isBlack,
@@ -53,7 +52,7 @@ export default {
       return store.state.board[i] === "w";
     },
     isValidMove(i) {
-      this.isGameOver()
+      this.isGameOver();
       let ret = [false, ""];
       let moves = Object.keys(store.state.possibleMoves);
       moves.forEach((function(move) {
@@ -64,18 +63,17 @@ export default {
       }));
       return ret;
     },
-      isGameOver() {
-        if (store.state.possibleMoves === undefined) {
-          this.count();
-          if (this.whites > this.blacks) {
-            alert("White won!!");
-          } else {
-            alert("Black won!!");
-          }
-          this.$router.push("/");
-          store.dispatch("resetBoard");
+    isGameOver() {
+      if (store.state.possibleMoves === undefined) {
+        this.count();
+        if (this.whites > this.blacks) {
+          alert("White won!!");
+        } else {
+          alert("Black won!!");
         }
+        this.$router.replace("/");
       }
+    }
   }
 };
 </script>

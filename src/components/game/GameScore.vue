@@ -16,7 +16,6 @@ export default {
 .score {
   color: rgb(90, 89, 88);
   width: fit-content;
-  position: relative;
   margin: auto;
   padding: 5px;
 }

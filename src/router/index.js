@@ -44,6 +44,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import("../views/LobbyView"),
   },
+  {
+    path: "/socket-test",
+    name: "ScoketTest",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("../views/SocketTestView"),
+  },
 ];
 
 const router = new VueRouter({

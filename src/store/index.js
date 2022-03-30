@@ -19,8 +19,13 @@ export default new Vuex.Store({
       "", "", "", "", "", "", "", "",
       "", "", "", "", "", "", "", ""
     ],
+    possibleMoves: [],
     isBlack: true,
-    possibleMoves: []
+
+    // (Bam) add the following as a reminder for usage in the future
+    turn: -1,
+    roomNumber: -1,
+    isYourTurn: false
   },
   getters: {},
   mutations: {
