@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import SocketTest from "@/components/ScoketTest";
+import SocketTest from "@/components/SocketTest";
 export default {
   name: "SocketTestView",
   components: { SocketTest }
