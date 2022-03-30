@@ -27,7 +27,11 @@ export default new Vuex.Store({
     roomNumber: -1,
     isYourTurn: false
   },
-  getters: {},
+  getters: {
+    getIsLoggedIn(state) {
+      return state.isLoggedIn;
+    }
+  },
   mutations: {
     setIsLoggedIn(state, isLoggedIn) {
       state.isLoggedIn = isLoggedIn;

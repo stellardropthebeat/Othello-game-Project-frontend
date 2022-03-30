@@ -17,6 +17,10 @@
       <li>
         <router-link to="/lobby">Go to lobby</router-link>
       </li>
+
+      <li>
+        <router-link to="/signIn">Go to signIn</router-link>
+      </li>
     </ul>
   </v-container>
 </template>

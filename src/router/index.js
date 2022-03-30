@@ -52,6 +52,11 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import("../views/SocketTestView"),
   },
+  {
+    path: "/signIn",
+    name: "SignIn",
+    component: () => import("../views/SigninView"),
+  },
 ];
 
 const router = new VueRouter({
@@ -73,7 +78,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // if the name of the router is not Login, it needs authorization
-  if (to.name !== "Login" && !isLoggedIn) {
+  if (to.name !== "Login" && to.name !== "SignIn" && !isLoggedIn) {
 
     // redirect to login page
     next({ name: "Login" });

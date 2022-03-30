@@ -5,7 +5,10 @@
         <v-col>
           <v-text-field
               v-model="username"
-              :rules="usernameRules"
+              :rules="[
+                  v => !!v || 'Username is required',
+                  this.ifFail || 'Username already taken'
+              ]"
               label="Username"
               required
               filled
@@ -18,9 +21,23 @@
               v-model="password"
               :rules="[
                   v => !!v || 'Password is required',
-                  this.ifFail || 'incorrect username or password'
+                  this.password === this.cpassword || 'Password unmatch'
               ]"
               label="Password"
+              required
+              filled
+              rounded
+              dense
+          ></v-text-field>
+
+          <v-text-field
+              type="cpaswword"
+              v-model="cpassword"
+              :rules="[
+                  v => !!v || 'Confirm Password is required',
+                  this.password === this.cpassword || 'Password unmatch'
+              ]"
+              label="Confirm Password"
               required
               filled
               rounded
@@ -30,15 +47,13 @@
 
 
         <v-btn
-            :disabled="!valid"
             color="success"
             class="mr-4"
             @click="submit"
-        > Login
+        > SIGN UP
         </v-btn>
 
         <v-btn color="error" class="mr-4" @click="reset"> Reset</v-btn>
-
       </v-form>
     </template>
   </v-container>
@@ -52,8 +67,8 @@ export default {
     valid: true,
     username: "",
     password: "",
+    cpassword:"",
     usernameRules: [v => !!v || "Username is required"],
-    passwordRules: [v => !!v || "Password is required"],
     ifFail: true,
   }),
 
@@ -65,12 +80,14 @@ export default {
         formData.append("username", this.username);
         formData.append("password", this.password);
 
-        let response = await Vue.axios.post("/api/login", formData);
+        let response = await Vue.axios.post("/api/signin", formData);
         if (response.data.success) {
-          this.$router.push({ path: "/"})
+          console.log("success")
+          this.$router.push({ path: "/login"})
         } else {
           console.log("fail")
           this.ifFail = false
+
         }
       }
     },

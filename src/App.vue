@@ -6,28 +6,29 @@
           alt="Vuetify Logo"
           class="shrink mr-2"
           contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          src="@/assets/othello-logo.png"
           transition="scale-transition"
-          width="40"
+          width="120"
+          @click="goHome"
         />
-        OTHELLO
 
-<!--        <v-img-->
-<!--          alt="Vuetify Name"-->
-<!--          class="shrink mt-1 hidden-sm-and-down"-->
-<!--          contain-->
-<!--          min-width="100"-->
-<!--          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"-->
-<!--          width="100"-->
-<!--        />-->
       </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn tile color="grey darken-1" @click="logout">
+      <v-btn v-if="isLoggedIn()" tile color="grey darken-1" @click="logout">
         <v-icon left>mdi-logout</v-icon>
         LOGOUT
       </v-btn>
+      <v-btn v-else  tile color="grey darken-1" @click="signin">
+        <v-icon left>mdi-logout</v-icon>
+        SIGN UP
+      </v-btn>
+
+<!--      <button v-if="isLoggedIn" class="btn btn-danger"-->
+<!--              v-on:click="logout" >LOGOUT</button>-->
+<!--      <button v-else class="btn btn-primary"-->
+<!--              v-on:click="login" >SIGNIN</button>-->
 
     </v-app-bar>
 
@@ -39,6 +40,7 @@
 
 <script>
 import Vue from "vue";
+import store from "./store"
 
 export default {
   name: "App",
@@ -50,9 +52,19 @@ export default {
     async logout () {
       let response = await Vue.axios.get("/api/logout");
       if (response.data.success) {
-      this.$router.push({ path: "/LoginView"})
+        store.dispatch("clearUser", response.data);
+        await this.$router.push({path: "/login"});
       }
     },
+    signin(){
+      this.$router.push({ path: "/signIn"});
+    },
+    isLoggedIn(){
+      return store.state.isLoggedIn;
+    },
+    goHome(){
+      this.$router.push({ path: "/"});
+    }
   },
 };
 </script>
