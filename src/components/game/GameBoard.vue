@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <p>Turn: {{turn}}</p>
     <game-score :blacks="blacks" :whites="whites" />
     <game-deco :isBlack="isBlack" />
     <div class="grid">
@@ -36,7 +37,8 @@ export default {
       "", "", "", "", "", "", "", ""
     ],
     possibleMoves: [],
-    connected: false
+    connected: false,
+    turn: 1
   }),
   async mounted() {
     let response = await Vue.axios.post("/api/post-board", {
@@ -65,6 +67,7 @@ export default {
             this.blacks = JSON.parse(tick.body)["blacks"];
             this.whites = JSON.parse(tick.body)["whites"];
             this.isBlack = JSON.parse(tick.body)["isBlack"];
+            this.turn = JSON.parse(tick.body)["turn"];
           });
         },
         error => {
@@ -79,7 +82,7 @@ export default {
         this.isBlack = !this.isBlack;
       }
       if (this.stompClient && this.stompClient.connected) {
-        const obj = { board: this.board, isBlack: this.isBlack, turn: -1, toFlip: this.possibleMoves[toPlace] };
+        const obj = { board: this.board, isBlack: this.isBlack, turn: this.turn, toFlip: this.possibleMoves[toPlace] };
         this.stompClient.send("/app/board/" + this.$store.state.roomNumber, JSON.stringify(obj), {});
       }
     },
