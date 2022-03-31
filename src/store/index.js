@@ -9,22 +9,10 @@ export default new Vuex.Store({
     username: null,
     name: null,
     role: "",
-    board: [
-      "", "", "", "", "", "", "", "",
-      "", "", "", "", "", "", "", "",
-      "", "", "", "", "", "", "", "",
-      "", "", "", "w", "b", "", "", "",
-      "", "", "", "b", "w", "", "", "",
-      "", "", "", "", "", "", "", "",
-      "", "", "", "", "", "", "", "",
-      "", "", "", "", "", "", "", ""
-    ],
-    possibleMoves: [],
-    isBlack: true,
 
     // (Bam) add the following as a reminder for usage in the future
     turn: -1,
-    roomNumber: -1,
+    roomNumber: "1",
     isYourTurn: false
   },
   getters: {
@@ -45,39 +33,6 @@ export default new Vuex.Store({
     setRole(state, role) {
       state.role = role;
     },
-    async putBoard(state, position) {
-      let color = "";
-      if (state.isBlack) {
-        color = "b";
-      } else {
-        color = "w";
-      }
-      state.board[position.i] = color;
-      let toFlip = state.possibleMoves[position.move];
-      toFlip.forEach((pos) => state.board[pos] = color);
-      state.isBlack = !state.isBlack;
-      let response = await Vue.axios.post("/api/post-board", { "isBlack": state.isBlack, "board": state.board });
-      // if there is no possible move skip a turn
-      if (response.data.possibleMoves === undefined) {
-        state.isBlack = !state.isBlack;
-        response = await Vue.axios.post("/api/post-board", { "isBlack": state.isBlack, "board": state.board });
-      }
-      state.possibleMoves = response.data.possibleMoves;
-    },
-    resetBoard(state) {
-      state.board = [
-        "", "", "", "", "", "", "", "",
-        "", "", "", "", "", "", "", "",
-        "", "", "", "", "", "", "", "",
-        "", "", "", "w", "b", "", "", "",
-        "", "", "", "b", "w", "", "", "",
-        "", "", "", "", "", "", "", "",
-        "", "", "", "", "", "", "", "",
-        "", "", "", "", "", "", "", ""
-      ];
-      state.isBlack = true;
-      state.possibleMoves = [];
-    }
   },
   actions: {
     setLoggedInUser({ commit }, payload) {
@@ -92,12 +47,6 @@ export default new Vuex.Store({
       commit("setName", null);
       commit("setRole", "");
     },
-    putBoard({ commit }, position) {
-      commit("putBoard", position);
-    },
-    resetBoard({ commit }) {
-      commit("resetBoard");
-    }
   },
   modules: {}
 });

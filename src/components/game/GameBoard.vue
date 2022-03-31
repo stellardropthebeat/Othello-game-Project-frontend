@@ -57,7 +57,7 @@ export default {
         frame => {
           this.connected = true;
           console.log(frame);
-          this.stompClient.subscribe("/topic/play", tick => {
+          this.stompClient.subscribe("/topic/play/" + this.$store.state.roomNumber, tick => {
             console.log("here is tick ---------------------------------");
             console.log(tick.body);
             this.board = JSON.parse(tick.body)["board"];
@@ -80,7 +80,7 @@ export default {
       }
       if (this.stompClient && this.stompClient.connected) {
         const obj = { board: this.board, isBlack: this.isBlack, turn: -1, toFlip: this.possibleMoves[toPlace] };
-        this.stompClient.send("/app/board", JSON.stringify(obj), {});
+        this.stompClient.send("/app/board/" + this.$store.state.roomNumber, JSON.stringify(obj), {});
       }
     },
     async put(i) {
