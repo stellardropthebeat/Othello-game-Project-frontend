@@ -37,20 +37,12 @@ const routes = [
     component: () => import("../views/GameView.vue"),
   },
   {
-    path: "/lobby",
-    name: "Lobby",
+    path: "/waiting",
+    name: "Waiting",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import("../views/LobbyView"),
-  },
-  {
-    path: "/socket-test",
-    name: "ScoketTest",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import("../views/SocketTestView"),
+    component: () => import("../views/WaitingView"),
   },
   {
     path: "/signIn",

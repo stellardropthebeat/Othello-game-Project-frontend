@@ -15,10 +15,10 @@
         <div class="col-md-6">
           <form class="form-inline">
             <div class="form-group">
-              <label for="name">What is your name?</label>
-              <input type="text" id="name" class="form-control" v-model="send_message" placeholder="Your name here...">
+              <label for="name">Input Lobby Name: </label>
+              <input type="text" id="name" class="form-control" v-model="send_message" placeholder="Lobby name here...">
             </div>
-            <button id="send" class="btn btn-default" type="submit" @click.prevent="send">Send</button>
+            <button id="create" class="btn btn-primary" type="button" @click.prevent="create">Create Lobby</button>
           </form>
         </div>
       </div>
@@ -46,7 +46,7 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 export default {
-  name: "SocketTest",
+  name: "WaitingView",
   data() {
     return {
       received_messages: [],
@@ -54,32 +54,37 @@ export default {
       connected: false
     };
   },
+  mounted() {
+    this.connect();
+  },
   methods: {
-    send() {
+    create() {
       console.log("Send message:" + this.send_message);
       if (this.stompClient && this.stompClient.connected) {
         const msg = { name: this.send_message };
         console.log(JSON.stringify(msg));
         this.stompClient.send("/app/hello", JSON.stringify(msg), {});
       }
+      this.connect();
+      this.$router.push({path: "/waiting"})
     },
     connect() {
       this.socket = new SockJS("http://localhost:8081/gs-guide-websocket");
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
-        {},
-        frame => {
-          this.connected = true;
-          console.log(frame);
-          this.stompClient.subscribe("/topic/greetings", tick => {
-            console.log(tick);
-            this.received_messages.push(JSON.parse(tick.body).content);
-          });
-        },
-        error => {
-          console.log(error);
-          this.connected = false;
-        }
+          {},
+          frame => {
+            this.connected = true;
+            console.log(frame);
+            this.stompClient.subscribe("/topic/greetings", tick => {
+              console.log(tick);
+              this.received_messages.push(JSON.parse(tick.body).content);
+            });
+          },
+          error => {
+            console.log(error);
+            this.connected = false;
+          }
       );
     },
     disconnect() {
@@ -92,9 +97,7 @@ export default {
       this.connected ? this.disconnect() : this.connect();
     }
   },
-  mounted() {
-    // this.connect();
-  }
+
 };
 </script>
 
