@@ -9,6 +9,7 @@
         transition="scale-transition"
         width="500"
     />
+
     <v-row align="center" justify="space-around">
       <v-col sm="6">
         <div class="button">
@@ -36,6 +37,8 @@
       </li>
 
     </ul>
+
+
 
   </v-container>
 </template>
