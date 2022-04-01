@@ -1,14 +1,14 @@
 <template>
   <div class="container">
-    <p v-show="false"> {{isGameOver()}} </p>
-    <p v-show="false">Turn: {{turn}}</p>
+    <p v-show="false"> {{ isGameOver() }} </p>
+    <p v-show="false">Turn: {{ turn }}</p>
     <game-score :blacks="blacks" :whites="whites" />
     <game-deco :isBlack="isBlack" />
     <div class="grid">
       <div class="cell" v-for="(n, i) in 64" :key="i" @click="put(i)">
         <div v-if="black(i)" class="b dot"></div>
         <div v-if="white(i)" class="w dot"></div>
-        <div v-if="isValidMove(i)[0] " class="move dot"></div>
+        <div v-if="isValidMove(i)[0]" class="move dot"></div>
       </div>
     </div>
   </div>
@@ -22,7 +22,7 @@ import Stomp from "webstomp-client";
 import GameDeco from "@/components/game/GameDeco";
 
 export default {
-  components: {GameDeco, GameScore },
+  components: { GameDeco, GameScore },
   data: () => ({
     isBlack: true,
     blacks: 2,
@@ -39,9 +39,13 @@ export default {
     ],
     possibleMoves: [],
     connected: false,
-    turn: 1
+    turn: 1,
+    color: ""
   }),
   async mounted() {
+    // let colorRes = await Vue.axios.post("/api/color", {"roomId": this.$store.state.roomId, "username": this.$store.state.username});
+    // this.isBlack = colorRes.data.color;
+
     let response = await Vue.axios.post("/api/post-board", {
       "isBlack": this.isBlack,
       "board": this.board
@@ -60,7 +64,7 @@ export default {
         frame => {
           this.connected = true;
           console.log(frame);
-          this.stompClient.subscribe("/topic/play/" + this.$store.state.roomNumber, tick => {
+          this.stompClient.subscribe("/topic/play/" + this.$store.state.roomId, tick => {
             console.log("here is tick ---------------------------------");
             console.log(tick.body);
             this.board = JSON.parse(tick.body)["board"];
@@ -80,7 +84,7 @@ export default {
     send(toPlace) {
       if (this.stompClient && this.stompClient.connected) {
         const obj = { board: this.board, isBlack: this.isBlack, turn: this.turn, toFlip: this.possibleMoves[toPlace] };
-        this.stompClient.send("/app/board/" + this.$store.state.roomNumber, JSON.stringify(obj), {});
+        this.stompClient.send("/app/board/" + this.$store.state.roomId, JSON.stringify(obj), {});
       }
     },
     async put(i) {
@@ -117,7 +121,7 @@ export default {
     },
     async isGameOver() {
       if (!this.board.includes("") || !(this.board.includes("b") && this.board.includes("w"))) {
-        await this.sleep(40)
+        await this.sleep(40);
         if (this.blacks > this.whites) {
           alert("Black Won!!!");
         } else if (this.whites > this.blacks) {
@@ -130,6 +134,9 @@ export default {
     },
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
+    },
+    isYourTurn() {
+      return this.isBlack === this.$store.state.color;
     }
 
   }

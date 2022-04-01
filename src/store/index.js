@@ -11,8 +11,7 @@ export default new Vuex.Store({
     role: "",
 
     // (Bam) add the following as a reminder for usage in the future
-    roomNumber: "1",
-    isYourTurn: false
+    roomId: 1,
   },
   getters: {
     getIsLoggedIn(state) {
