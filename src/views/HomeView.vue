@@ -20,7 +20,7 @@
 
         <div class="button">
           <v-btn large block @click="gotoLobby" color="blue-grey lighten-5">
-            LOBBY
+            JOIN ROOM
           </v-btn>
         </div>
 
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 export default {
   name: "HomeView",
 
@@ -53,8 +54,12 @@ export default {
     gotoAbout() {
       this.$router.push({path: "/about"})
     },
-    gotoLobby() {
-      this.$router.push({path: "/lobby"})
+    async gotoLobby() {
+      let response = await Vue.axios.post("/api/join-room", {
+        "username": this.$store.state.username}
+      );
+      this.$store.state.roomId = response.data.availableRoom;
+      this.$router.push({path: "/waiting"})
     },
   },
 };
