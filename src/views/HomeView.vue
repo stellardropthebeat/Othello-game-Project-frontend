@@ -1,27 +1,42 @@
 <template>
   <v-container>
-    <h2>Home Page</h2>
+
+    <v-img
+        alt="Vuetify Logo"
+        class="logo"
+        contain
+        src="@/assets/othello-logo.png"
+        transition="scale-transition"
+        width="500"
+    />
+    <v-row align="center" justify="space-around">
+      <v-col sm="6">
+        <div class="button">
+          <v-btn large block @click="gotoAbout" color="blue-grey lighten-5">
+            ABOUT
+          </v-btn>
+        </div>
+
+        <div class="button">
+          <v-btn large block @click="gotoLobby" color="blue-grey lighten-5">
+            LOBBY
+          </v-btn>
+        </div>
+
+
+      </v-col>
+    </v-row>
+
+
+
     <ul>
-      <li>
-        <router-link to="/">Go to Home</router-link>
-      </li>
-      <li>
-        <router-link to="/about">Go to About</router-link>
-      </li>
+
       <li>
         <router-link to="/game">Go to Game</router-link>
       </li>
-      <li>
-        <router-link to="/login">Go to login</router-link>
-      </li>
-      <li>
-        <router-link to="/lobby">Go to lobby</router-link>
-      </li>
 
-      <li>
-        <router-link to="/signIn">Go to signIn</router-link>
-      </li>
     </ul>
+
   </v-container>
 </template>
 
@@ -30,5 +45,28 @@ export default {
   name: "HomeView",
 
   components: {},
+
+  methods: {
+    gotoAbout() {
+      this.$router.push({path: "/about"})
+    },
+    gotoLobby() {
+      this.$router.push({path: "/lobby"})
+    },
+  },
 };
 </script>
+
+<style scoped>
+.logo {
+  margin: auto;
+  padding-bottom: 100px;
+}
+
+.button {
+  margin: auto;
+  padding-bottom: 30px;
+}
+
+</style>
+
