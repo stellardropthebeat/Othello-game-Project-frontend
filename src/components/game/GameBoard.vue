@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <p>Turn: {{turn}}</p>
+    <p v-show="false"> {{isGameOver()}} </p>
+    <p v-show="false">Turn: {{turn}}</p>
     <game-score :blacks="blacks" :whites="whites" />
     <game-deco :isBlack="isBlack" />
     <div class="grid">
@@ -21,7 +22,7 @@ import Stomp from "webstomp-client";
 import GameDeco from "@/components/game/GameDeco";
 
 export default {
-  components: { GameDeco, GameScore },
+  components: {GameDeco, GameScore },
   data: () => ({
     isBlack: true,
     blacks: 2,
@@ -77,10 +78,6 @@ export default {
       );
     },
     send(toPlace) {
-
-      if (this.possibleMoves[toPlace] === undefined) {
-        this.isBlack = !this.isBlack;
-      }
       if (this.stompClient && this.stompClient.connected) {
         const obj = { board: this.board, isBlack: this.isBlack, turn: this.turn, toFlip: this.possibleMoves[toPlace] };
         this.stompClient.send("/app/board/" + this.$store.state.roomNumber, JSON.stringify(obj), {});
@@ -99,12 +96,6 @@ export default {
         }
         this.board[toPlace] = color;
         this.send(toPlace);
-
-        this.$forceUpdate();
-
-        // give sometime to update board UI
-        await this.sleep(40);
-        this.isGameOver();
       }
     },
     black(i) {
@@ -124,8 +115,9 @@ export default {
       }));
       return ret;
     },
-    isGameOver() {
-      if (!this.board.includes("")) {
+    async isGameOver() {
+      if (!this.board.includes("") || !(this.board.includes("b") && this.board.includes("w"))) {
+        await this.sleep(40)
         if (this.blacks > this.whites) {
           alert("Black Won!!!");
         } else if (this.whites > this.blacks) {
@@ -133,7 +125,7 @@ export default {
         } else {
           alert("Draw!");
         }
-        this.$router.replace("/");
+        await this.$router.replace("/");
       }
     },
     sleep(ms) {
