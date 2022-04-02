@@ -62,9 +62,6 @@ export default {
             console.log(tick.body);
             this.player1 = JSON.parse(tick.body)["player1"];
             this.player2 = JSON.parse(tick.body)["player2"];
-            if(this.player1===null){
-              this.$router.push({path: "/"})
-            }
           });
         },
         error => {
