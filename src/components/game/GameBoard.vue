@@ -2,13 +2,14 @@
   <div class="container">
     <p v-show="false"> {{ gameOver() }} </p>
     <p v-show="false">Turn: {{ turn }}</p>
+    <p v-show="false">Turn: {{ isYourTurn() }}</p>
     <game-score :blacks="blacks" :whites="whites" />
     <game-deco :isBlack="isBlack" />
     <div class="grid">
       <div class="cell" v-for="(n, i) in 64" :key="i" @click="put(i)">
         <div v-if="black(i)" class="b dot"></div>
         <div v-if="white(i)" class="w dot"></div>
-        <div v-if="isValidMove(i)[0]" class="move dot"></div>
+        <div v-if="isValidMove(i)[0] && isYourTurn()" class="move dot"></div>
       </div>
     </div>
   </div>
@@ -40,12 +41,16 @@ export default {
     possibleMoves: [],
     connected: false,
     turn: 1,
-    isGameOver: false
-    // color: ""
+    isGameOver: false,
+    color: "",
+    score: 0
   }),
   async mounted() {
-    // let colorRes = await Vue.axios.post("/api/color", {"roomId": this.$store.state.roomId, "username": this.$store.state.username});
-    // this.isBlack = colorRes.data.color;
+    let colorRes = await Vue.axios.post("/api/color", {
+      "roomId": this.$store.state.roomId,
+      "username": this.$store.state.username
+    });
+    this.color = colorRes.data.color;
 
     let response = await Vue.axios.post("/api/post-board", {
       "isBlack": this.isBlack,
@@ -75,7 +80,7 @@ export default {
             this.whites = JSON.parse(tick.body)["whites"];
             this.isBlack = JSON.parse(tick.body)["isBlack"];
             this.turn = JSON.parse(tick.body)["turn"];
-            if (this.possibleMoves.length === 0) {
+            if (this.possibleMoves === undefined) {
               this.isGameOver = true;
               this.gameOver();
             }
@@ -96,7 +101,7 @@ export default {
     async put(i) {
       let move = this.isValidMove(i);
       let toPlace = move[1];
-      if (move[0] && this.board[i] === "") {
+      if (move[0] && this.board[i] === "" && this.isYourTurn()) {
 
         let color = "";
         if (this.isBlack) {
@@ -108,8 +113,9 @@ export default {
         this.send(toPlace);
       }
       await Vue.axios.post("/api/add-board-record", {
-        "isBlack": this.isBlack,
-        "board": this.board
+        "roomId": this.$store.state.roomId,
+        "turn": this.turn,
+        "boardRecord": this.board
       });
     },
     black(i) {
@@ -134,19 +140,39 @@ export default {
         await this.sleep(40);
         if (this.blacks > this.whites) {
           alert("Black Won!!!");
+          if (this.color === "b") {
+            this.score = 1;
+          }
         } else if (this.whites > this.blacks) {
           alert("White Won!!!");
+          if (this.color === "w") {
+            this.score = 1;
+          }
         } else {
           alert("Draw!");
         }
         await this.$router.replace("/");
+        await this.recordLatestGame();
       }
+    },
+    async recordLatestGame() {
+      await Vue.axios.post("/api/latest-game", {
+        "roomId": this.$store.state.roomId,
+        "username": this.$store.state.username,
+        "score": this.score
+      });
     },
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     },
     isYourTurn() {
-      return this.isBlack === this.$store.state.color;
+      let c = "";
+      if (this.isBlack) {
+        c = "b";
+      } else {
+        c = "w";
+      }
+      return c === this.color;
     }
 
   }

@@ -55,6 +55,11 @@ const routes = [
     component: () => import("../views/LeaderboardView"),
   },
   {
+    path: "/replay",
+    name: "Replay",
+    component: () => import("../views/GameReplayView"),
+  },
+  {
     path: "/credit",
     name: "Credit",
     component: () => import("../views/CreditView"),
