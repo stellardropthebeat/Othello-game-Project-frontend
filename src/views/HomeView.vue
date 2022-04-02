@@ -14,7 +14,7 @@
       <v-col sm="6">
         <div class="button">
           <v-btn large block @click="gotoAbout" color="blue-grey lighten-5">
-            ABOUT
+            HOW TO PLAY OTHELLO
           </v-btn>
         </div>
 
@@ -25,7 +25,7 @@
         </div>
 
         <div class="button">
-          <v-btn large block color="blue-grey lighten-5">
+          <v-btn large block color="blue-grey lighten-5" @click="gotoReplay">
             REPLAY LATEST GAME
           </v-btn>
         </div>
@@ -45,19 +45,6 @@
 
       </v-col>
     </v-row>
-
-
-
-    <ul>
-
-      <li>
-        <router-link to="/game">Go to Game</router-link>
-      </li>
-
-    </ul>
-
-
-
   </v-container>
 </template>
 
@@ -85,6 +72,9 @@ export default {
     },
     gotoCredit() {
       this.$router.push({path: "/credit"})
+    },
+    gotoReplay() {
+      this.$router.push({path: "/replay"})
     }
   },
 };
