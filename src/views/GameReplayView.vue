@@ -30,17 +30,19 @@ export default {
         "", "", "", "", "", "", "", ""
       ],
       blacks: 0,
-      whites: 0
+      whites: 0,
+      finished: false
     };
   },
   async mounted() {
     let turn = 1;
-    while (this.board !== null) {
+    while (!this.finished) {
+      await this.sleep(500);
       let response = await Vue.axios.post("/api/replay", { "turn": turn, "username": this.$store.state.username });
       this.board = response.data.board;
+      this.finished = response.data.finished;
       this.$forceUpdate();
       this.count();
-      await this.sleep(500);
       turn++;
     }
     alert("End of Game")
