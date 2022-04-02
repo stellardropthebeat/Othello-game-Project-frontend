@@ -1,9 +1,9 @@
 <template>
   <div>
-   {{player1}} <!-- Player1-->
+    {{ player1 }} <!-- Player1-->
     {{ player2 }} <!-- Player2-->
     <button type="button" @click="start">Start Game</button>
-    <button id="leave" class="btn btn-primary" type="button" @click.prevent="leave">Leave Lobby</button>
+    <button id="leave" class="btn btn-primary" type="button" @click="leave">Leave Lobby</button>
   </div>
 </template>
 
@@ -11,6 +11,7 @@
 import Vue from "vue";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+
 export default {
   name: "WaitingView",
   data() {
@@ -21,7 +22,7 @@ export default {
       connected: false
     };
   },
-  async mounted() {
+  async created() {
     let response = await Vue.axios.post("/api/post-room", {
       "roomId": this.$store.state.roomId
     });
@@ -31,49 +32,50 @@ export default {
     console.log(this.player1);
     console.log(this.player2);
     this.connect();
+    await this.sleep(50);
     this.send();
   },
   methods: {
     async leave() {
-      await Vue.axios.post("/api/leave-room",{
+      await Vue.axios.post("/api/leave-room", {
         "username": this.$store.state.username,
         "roomId": this.$store.state.roomId
       });
-      this.$router.push({path: "/"})
+      this.$router.push({ path: "/" });
       this.send();
     },
-    start(){
-      this.$router.push({path: "/game"})
+    start() {
+      this.$router.push({ path: "/game" });
     },
-    checkPlayerDisabledButton(){
-      return this.player1===undefined || this.player2===undefined;
+    checkPlayerDisabledButton() {
+      return this.player1 === undefined || this.player2 === undefined;
     },
     connect() {
       this.socket = new SockJS("http://localhost:8081/waiting-room-socket");
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
-          {},
-          frame => {
-            this.connected = true;
-            console.log(frame);
-            this.stompClient.subscribe("/topic/wait/" + this.$store.state.roomId, tick => {
-              console.log(tick.body);
-              this.player1 = JSON.parse(tick.body)["player1"];
-              this.player2 = JSON.parse(tick.body)["player2"];
-              if(this.player1===undefined && this.player2===undefined){
-                this.$router.push({path: "/"})
-              }
-            });
-          },
-          error => {
-            console.log(error);
-            this.connected = false;
-          }
+        {},
+        frame => {
+          this.connected = true;
+          console.log(frame);
+          this.stompClient.subscribe("/topic/wait/" + this.$store.state.roomId, tick => {
+            console.log(tick.body);
+            this.player1 = JSON.parse(tick.body)["player1"];
+            this.player2 = JSON.parse(tick.body)["player2"];
+            if(this.player1===null){
+              this.$router.push({path: "/"})
+            }
+          });
+        },
+        error => {
+          console.log(error);
+          this.connected = false;
+        }
       );
     },
     send() {
       if (this.stompClient && this.stompClient.connected) {
-        const obj = {roomId: this.$store.state.roomId};
+        const obj = { roomId: this.$store.state.roomId };
         this.stompClient.send("/app/room/" + this.$store.state.roomId, JSON.stringify(obj), {});
       }
     },
@@ -83,10 +85,10 @@ export default {
       }
       this.connected = false;
     },
-    tickleConnection() {
-      this.connected ? this.disconnect() : this.connect();
-    }
-  },
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    },
+  }
 
 };
 </script>

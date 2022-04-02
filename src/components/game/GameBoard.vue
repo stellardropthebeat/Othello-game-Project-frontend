@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <p v-show="false"> {{ isGameOver() }} </p>
+    <p v-show="false"> {{ gameOver() }} </p>
     <p v-show="false">Turn: {{ turn }}</p>
     <game-score :blacks="blacks" :whites="whites" />
     <game-deco :isBlack="isBlack" />
@@ -40,7 +40,8 @@ export default {
     possibleMoves: [],
     connected: false,
     turn: 1,
-    color: ""
+    isGameOver: false
+    // color: ""
   }),
   async mounted() {
     // let colorRes = await Vue.axios.post("/api/color", {"roomId": this.$store.state.roomId, "username": this.$store.state.username});
@@ -53,6 +54,7 @@ export default {
 
     this.possibleMoves = response.data.possibleMoves;
     console.log(this.possibleMoves);
+    console.log(this.$store.state.username);
     this.connect();
   },
   methods: {
@@ -65,14 +67,18 @@ export default {
           this.connected = true;
           console.log(frame);
           this.stompClient.subscribe("/topic/play/" + this.$store.state.roomId, tick => {
-            console.log("here is tick ---------------------------------");
-            console.log(tick.body);
+            // console.log("here is tick ---------------------------------");
+            // console.log(tick.body);
             this.board = JSON.parse(tick.body)["board"];
             this.possibleMoves = JSON.parse(tick.body)["possibleMoves"];
             this.blacks = JSON.parse(tick.body)["blacks"];
             this.whites = JSON.parse(tick.body)["whites"];
             this.isBlack = JSON.parse(tick.body)["isBlack"];
             this.turn = JSON.parse(tick.body)["turn"];
+            if (this.possibleMoves.length === 0) {
+              this.isGameOver = true;
+              this.gameOver();
+            }
           });
         },
         error => {
@@ -101,6 +107,10 @@ export default {
         this.board[toPlace] = color;
         this.send(toPlace);
       }
+      await Vue.axios.post("/api/add-board-record", {
+        "isBlack": this.isBlack,
+        "board": this.board
+      });
     },
     black(i) {
       return this.board[i] === "b";
@@ -119,8 +129,8 @@ export default {
       }));
       return ret;
     },
-    async isGameOver() {
-      if (!this.board.includes("") || !(this.board.includes("b") && this.board.includes("w"))) {
+    async gameOver() {
+      if (!this.board.includes("") || this.isGameOver) {
         await this.sleep(40);
         if (this.blacks > this.whites) {
           alert("Black Won!!!");
