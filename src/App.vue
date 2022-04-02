@@ -3,8 +3,7 @@
     <v-app-bar app color="gray" dark>
       <div class="d-flex align-center">
         <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
+          class="logo"
           contain
           src="@/assets/othello-logo.png"
           transition="scale-transition"
@@ -37,6 +36,12 @@
     </v-main>
   </v-app>
 </template>
+
+<style>
+.logo {
+  cursor: pointer;
+}
+</style>
 
 <script>
 import Vue from "vue";

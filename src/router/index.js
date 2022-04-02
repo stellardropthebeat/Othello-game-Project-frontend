@@ -49,6 +49,16 @@ const routes = [
     name: "SignIn",
     component: () => import("../views/SigninView"),
   },
+  {
+    path: "/leaderboard",
+    name: "Leaderboard",
+    component: () => import("../views/LeaderboardView"),
+  },
+  {
+    path: "/credit",
+    name: "Credit",
+    component: () => import("../views/CreditView"),
+  },
 ];
 
 const router = new VueRouter({
