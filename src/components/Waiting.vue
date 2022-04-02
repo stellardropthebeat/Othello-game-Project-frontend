@@ -1,84 +1,66 @@
 <template>
   <div>
-    <div id="main-content" class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <form class="form-inline">
-            <div class="form-group">
-              <label for="connect">WebSocket connection:</label>
-              <button id="connect" class="btn btn-default" type="submit" :disabled="connected == true" @click.prevent="connect">Connect</button>
-              <button id="disconnect" class="btn btn-default" type="submit" :disabled="connected == false" @click.prevent="disconnect">Disconnect
-              </button>
-            </div>
-          </form>
-        </div>
-        <div class="col-md-6">
-          <form class="form-inline">
-            <div class="form-group">
-              <label for="name">Input Lobby Name: </label>
-              <input type="text" id="name" class="form-control" v-model="send_message" placeholder="Lobby name here...">
-            </div>
-            <button id="create" class="btn btn-primary" type="button" @click.prevent="create">Create Lobby</button>
-          </form>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <table id="conversation" class="table table-striped">
-            <thead>
-            <tr>
-              <th>Greetings</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="item in received_messages" :key="item">
-              <td>{{ item }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+   {{player1}} <!-- Player1-->
+    {{ player2 }} <!-- Player2-->
+    <button type="button" @click="start">Start Game</button>
+    <button id="leave" class="btn btn-primary" type="button" @click.prevent="leave">Leave Lobby</button>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 export default {
   name: "WaitingView",
   data() {
     return {
-      received_messages: [],
+      player1: null,
+      player2: null,
       send_message: null,
       connected: false
     };
   },
-  mounted() {
+  async mounted() {
+    let response = await Vue.axios.post("/api/post-room", {
+      "roomId": this.$store.state.roomId
+    });
+
+    this.player1 = response.data.player1;
+    this.player2 = response.data.player2;
+    console.log(this.player1);
+    console.log(this.player2);
     this.connect();
   },
   methods: {
-    create() {
-      console.log("Send message:" + this.send_message);
-      if (this.stompClient && this.stompClient.connected) {
-        const msg = { name: this.send_message };
-        console.log(JSON.stringify(msg));
-        this.stompClient.send("/app/hello", JSON.stringify(msg), {});
-      }
-      this.connect();
-      this.$router.push({path: "/waiting"})
+    async leave() {
+      await Vue.axios.post("/api/leave-room",{
+        "username": this.$store.state.username,
+        "roomId": this.$store.state.roomId
+      });
+      this.$router.push({path: "/"})
+    },
+    start(){
+      this.$router.push({path: "/game"})
+    },
+    checkPlayerDisabledButton(){
+      return this.player1===undefined || this.player2===undefined;
     },
     connect() {
-      this.socket = new SockJS("http://localhost:8081/gs-guide-websocket");
+      this.socket = new SockJS("http://localhost:8081/waiting-room-socket");
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
           {},
           frame => {
             this.connected = true;
             console.log(frame);
-            this.stompClient.subscribe("/topic/greetings", tick => {
-              console.log(tick);
-              this.received_messages.push(JSON.parse(tick.body).content);
+            this.stompClient.subscribe("/topic/wait/" + this.$store.state.roomId, tick => {
+              console.log(tick.body);
+              this.player1 = JSON.parse(tick.body)["player1"];
+              this.player2 = JSON.parse(tick.body)["player2"];
+              if(this.player1===undefined && this.player2===undefined){
+                this.$router.push({path: "/"})
+              }
             });
           },
           error => {

@@ -59,7 +59,8 @@ export default {
         "username": this.$store.state.username}
       );
       this.$store.state.roomId = response.data.availableRoom;
-      this.$router.push({path: "/waiting"})
+      console.log(this.$store.state.roomId);
+      await this.$router.push({path: "/waiting"})
     },
   },
 };
