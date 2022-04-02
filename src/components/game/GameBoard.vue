@@ -1,10 +1,8 @@
 <template>
   <div class="container">
     <p v-show="false"> {{ gameOver() }} </p>
-    <p v-show="false">Turn: {{ turn }}</p>
-    <p v-show="false">Turn: {{ isYourTurn() }}</p>
     <game-score :blacks="blacks" :whites="whites" />
-    <game-deco :isBlack="isBlack" />
+    <game-deco :isBlack="isBlack" :isYourTurn="isYourTurn()"/>
     <div class="grid">
       <div class="cell" v-for="(n, i) in 64" :key="i" @click="put(i)">
         <div v-if="black(i)" class="b dot"></div>

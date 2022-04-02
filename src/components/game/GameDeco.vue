@@ -1,16 +1,25 @@
 <template>
   <div>
-    <div class="half-circle left border-left" v-if="this.isBlack"><h3>Your Turn</h3></div>
-    <div class="half-circle left" v-else ></div>
-    <div class="half-circle right border-right" v-if="!this.isBlack"><h3 >Your Turn</h3></div>
+    <div class="half-circle left border-left" v-if="this.isBlack"><h3>{{ message() }}</h3></div>
+    <div class="half-circle left" v-else></div>
+    <div class="half-circle right border-right" v-if="!this.isBlack"><h3>{{ message() }}</h3></div>
     <div class="half-circle right" v-else></div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["isBlack"]
-}
+  props: ["isBlack", "isYourTurn"],
+  methods: {
+    message() {
+      if (this.isYourTurn) {
+        return "Your Turn";
+      } else {
+        return "Opponent's Turn";
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -44,24 +53,29 @@ export default {
   background-color: white;
   border-right: 0;
 }
+
 .left h3 {
   color: white;
   position: relative;
   top: 50%;
-  left: 10%;
+  width: fit-content;
+  left: 15%;
 }
+
 .right h3 {
   color: #363636;
   position: relative;
   top: 50%;
-  left: 50%;
+  left: 20%;
 }
-.border-left{
+
+.border-left {
   border: 10px solid rgb(90, 245, 248);
   /*border: 10px solid aqua;*/
   border-left: 0;
 }
-.border-right{
+
+.border-right {
   border: 10px solid rgb(90, 245, 248);
   /*border: 10px solid aqua;*/
   border-right: 0;
