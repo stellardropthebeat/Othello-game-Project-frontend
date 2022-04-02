@@ -1,10 +1,8 @@
 <template>
   <div class="container">
     <p v-show="false"> {{ gameOver() }} </p>
-    <p v-show="false">Turn: {{ turn }}</p>
-    <p v-show="false">Turn: {{ isYourTurn() }}</p>
     <game-score :blacks="blacks" :whites="whites" />
-    <game-deco :isBlack="isBlack" />
+    <game-deco :isBlack="isBlack" :isYourTurn="isYourTurn()"/>
     <div class="grid">
       <div class="cell" v-for="(n, i) in 64" :key="i" @click="put(i)">
         <div v-if="black(i)" class="b dot"></div>
@@ -40,7 +38,7 @@ export default {
     ],
     possibleMoves: [],
     connected: false,
-    turn: 1,
+    turn: 0,
     isGameOver: false,
     color: "",
     score: 0
@@ -72,7 +70,6 @@ export default {
           this.connected = true;
           console.log(frame);
           this.stompClient.subscribe("/topic/play/" + this.$store.state.roomId, tick => {
-            // console.log("here is tick ---------------------------------");
             // console.log(tick.body);
             this.board = JSON.parse(tick.body)["board"];
             this.possibleMoves = JSON.parse(tick.body)["possibleMoves"];
@@ -80,10 +77,6 @@ export default {
             this.whites = JSON.parse(tick.body)["whites"];
             this.isBlack = JSON.parse(tick.body)["isBlack"];
             this.turn = JSON.parse(tick.body)["turn"];
-            if (this.possibleMoves === undefined) {
-              this.isGameOver = true;
-              this.gameOver();
-            }
           });
         },
         error => {
@@ -94,7 +87,7 @@ export default {
     },
     send(toPlace) {
       if (this.stompClient && this.stompClient.connected) {
-        const obj = { board: this.board, isBlack: this.isBlack, turn: this.turn, toFlip: this.possibleMoves[toPlace] };
+        const obj = {roomId: this.$store.state.roomId, board: this.board, isBlack: this.isBlack, turn: this.turn, toFlip: this.possibleMoves[toPlace] };
         this.stompClient.send("/app/board/" + this.$store.state.roomId, JSON.stringify(obj), {});
       }
     },
@@ -102,21 +95,8 @@ export default {
       let move = this.isValidMove(i);
       let toPlace = move[1];
       if (move[0] && this.board[i] === "" && this.isYourTurn()) {
-
-        let color = "";
-        if (this.isBlack) {
-          color = "b";
-        } else {
-          color = "w";
-        }
-        this.board[toPlace] = color;
         this.send(toPlace);
       }
-      await Vue.axios.post("/api/add-board-record", {
-        "roomId": this.$store.state.roomId,
-        "turn": this.turn,
-        "boardRecord": this.board
-      });
     },
     black(i) {
       return this.board[i] === "b";
@@ -151,8 +131,10 @@ export default {
         } else {
           alert("Draw!");
         }
-        await this.$router.replace("/");
+
         await this.recordLatestGame();
+        await this.sleep(100);
+        await this.$router.replace("/");
       }
     },
     async recordLatestGame() {
