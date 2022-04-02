@@ -31,6 +31,7 @@ export default {
     console.log(this.player1);
     console.log(this.player2);
     this.connect();
+    this.send();
   },
   methods: {
     async leave() {
@@ -39,6 +40,7 @@ export default {
         "roomId": this.$store.state.roomId
       });
       this.$router.push({path: "/"})
+      this.send();
     },
     start(){
       this.$router.push({path: "/game"})
@@ -68,6 +70,12 @@ export default {
             this.connected = false;
           }
       );
+    },
+    send() {
+      if (this.stompClient && this.stompClient.connected) {
+        const obj = {roomId: this.$store.state.roomId};
+        this.stompClient.send("/app/room/" + this.$store.state.roomId, JSON.stringify(obj), {});
+      }
     },
     disconnect() {
       if (this.stompClient) {
