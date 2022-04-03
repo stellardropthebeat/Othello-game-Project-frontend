@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <p v-show="false"> {{ gameOver() }} </p>
     <game-score :blacks="blacks" :whites="whites" />
     <game-deco :isBlack="isBlack" :isYourTurn="isYourTurn()"/>
     <div class="grid">
@@ -36,10 +35,9 @@ export default {
       "", "", "", "", "", "", "", "",
       "", "", "", "", "", "", "", ""
     ],
-    possibleMoves: [],
+    possibleMoves: null,
     connected: false,
     turn: 0,
-    isGameOver: false,
     color: "",
     score: 0
   }),
@@ -77,6 +75,7 @@ export default {
             this.whites = JSON.parse(tick.body)["whites"];
             this.isBlack = JSON.parse(tick.body)["isBlack"];
             this.turn = JSON.parse(tick.body)["turn"];
+            this.gameOver();
           });
         },
         error => {
@@ -116,7 +115,7 @@ export default {
       return ret;
     },
     async gameOver() {
-      if (!this.board.includes("") || this.isGameOver) {
+      if (!this.board.includes("") || Object.keys(this.possibleMoves).length === 0) {
         await this.sleep(40);
         if (this.blacks > this.whites) {
           alert("Black Won!!!");
