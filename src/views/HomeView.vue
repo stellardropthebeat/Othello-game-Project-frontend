@@ -3,45 +3,32 @@
 
     <v-img
         alt="Vuetify Logo"
-        class="homeLogo"
-        contain
+        class="homeLogo mb-10 mt-5"
         src="@/assets/othello-logo.png"
-        transition="scale-transition"
-        width="500"
+        contain
     />
 
     <v-row align="center" justify="space-around">
       <v-col sm="6">
-        <div class="button">
-          <v-btn large block @click="gotoAbout" color="blue-grey lighten-5">
+          <v-btn large block @click="gotoAbout">
             HOW TO PLAY OTHELLO
           </v-btn>
-        </div>
 
-        <div class="button">
-          <v-btn large block @click="gotoLobby" color="blue-grey lighten-5">
+          <v-btn large block @click="gotoLobby" >
             JOIN ROOM
           </v-btn>
-        </div>
 
-        <div class="button">
-          <v-btn large block color="blue-grey lighten-5" @click="gotoReplay">
+          <v-btn large block  @click="gotoReplay">
             REPLAY LATEST GAME
           </v-btn>
-        </div>
 
-        <div class="button">
-          <v-btn large block color="blue-grey lighten-5" @click="gotoLeaderboard">
+          <v-btn large block  @click="gotoLeaderboard">
             LEADERBOARD
           </v-btn>
-        </div>
 
-        <div class="button">
-          <v-btn large block color="blue-grey lighten-5" @click="gotoCredit">
+          <v-btn large block @click="gotoCredit">
             CREDIT
           </v-btn>
-        </div>
-
 
       </v-col>
     </v-row>
@@ -83,12 +70,13 @@ export default {
 <style scoped>
 .homeLogo {
   margin: auto;
-  padding-bottom: 100px;
+  width: 500px;
+
 }
 
-.button {
-  margin: auto;
-  padding-bottom: 30px;
+button {
+  margin-bottom: 20px;
+  border-radius: 15px;
 }
 
 </style>
