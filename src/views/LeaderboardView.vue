@@ -1,6 +1,13 @@
 <template>
   <div class="container">
-    <h1 class="mt-4 text-center">Leaderboard</h1>
+    <v-img
+        alt="leaderboard logo"
+        contain
+        class="mt-5"
+        src="@/assets/leaderboard.png"
+        transition="scale-transition"
+        width="500"
+    />
     <table class="table mt-5 box">
       <thead>
       <tr>
@@ -50,6 +57,6 @@ export default {
 .box {
   margin: auto;
 }
-
+div {width: fit-content; margin: auto; }
 
 </style>
