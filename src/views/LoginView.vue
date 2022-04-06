@@ -30,14 +30,13 @@
 
 
         <v-btn
-            :disabled="!valid"
             color="success"
             class="mr-4"
             @click="submit"
         > Login
         </v-btn>
 
-        <v-btn color="error" class="mr-4" @click="reset"> Reset</v-btn>
+<!--        <v-btn color="error" class="mr-4" @click="reset"> Reset</v-btn>-->
 
       </v-form>
     </template>
@@ -71,6 +70,7 @@ export default {
         } else {
           console.log("fail")
           this.ifFail = false
+          setTimeout(() => {this.$router.go();}, 500);
         }
       }
     },

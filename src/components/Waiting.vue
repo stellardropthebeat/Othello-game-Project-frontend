@@ -41,7 +41,7 @@ export default {
         "username": this.$store.state.username,
         "roomId": this.$store.state.roomId
       });
-      this.$router.push({ path: "/" });
+      await this.$router.push({path: "/"});
       this.send();
     },
     start() {
@@ -62,6 +62,9 @@ export default {
             console.log(tick.body);
             this.player1 = JSON.parse(tick.body)["player1"];
             this.player2 = JSON.parse(tick.body)["player2"];
+            if(this.player1==null && this.player2==null){
+              this.$router.push({path: "/"})
+            }
           });
         },
         error => {
