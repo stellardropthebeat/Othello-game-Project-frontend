@@ -53,7 +53,7 @@
         > SIGN UP
         </v-btn>
 
-        <v-btn color="error" class="mr-4" @click="reset"> Reset</v-btn>
+<!--        <v-btn color="error" class="mr-4" @click="reset"> Reset</v-btn>-->
       </v-form>
     </template>
   </v-container>
@@ -87,6 +87,7 @@ export default {
         } else {
           console.log("fail")
           this.ifFail = false
+          setTimeout(() => {this.$router.go();}, 2000);
 
         }
       }

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="gray" dark>
+    <v-app-bar app color="black" dark>
       <div class="d-flex align-center">
         <v-img
           class="logo"
@@ -15,11 +15,11 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="isLoggedIn()" tile color="grey darken-1" @click="logout">
+      <v-btn v-if="isLoggedIn()" tile color="black" @click="logout">
         <v-icon left>mdi-logout</v-icon>
         LOGOUT
       </v-btn>
-      <v-btn v-else  tile color="grey darken-1" @click="signin">
+      <v-btn v-else  tile color="black" @click="signin">
         <v-icon left>mdi-logout</v-icon>
         SIGN UP
       </v-btn>

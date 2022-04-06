@@ -11,9 +11,9 @@
       </thead>
       <tbody>
       <tr v-for="(entry, i) in allScores" :key="i">
-        <th scope="row">{{ ++i }}</th>
-        <td>{{ entry[0] }}</td>
-        <td>{{ entry[1] }}</td>
+        <th scope="row" class="text-center">{{ ++i }}</th>
+        <td class="text-center">{{ entry[0] }}</td>
+        <td class="text-center">{{ entry[1] }}</td>
       </tr>
       </tbody>
     </table>
