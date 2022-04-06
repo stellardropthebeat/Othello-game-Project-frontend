@@ -1,14 +1,14 @@
 <template>
-  <div class="container">
+  <div class="container mt-10 pb-10">
     <v-img
-        alt="leaderboard logo"
-        contain
-        class="mt-5"
-        src="@/assets/leaderboard.png"
-        transition="scale-transition"
-        width="500"
+      alt="leaderboard logo"
+      contain
+      class="mt-5"
+      src="@/assets/leaderboard.png"
+      transition="scale-transition"
+      width="550"
     />
-    <table class="table mt-5 box">
+    <table class="table mt-3 box">
       <thead>
       <tr>
         <th scope="col" class="column">#</th>
@@ -32,20 +32,19 @@ import Vue from "vue";
 
 export default {
   data: () => ({ name: "", score: "", allScores: [] }),
-  computed: {
-  },
+  computed: {},
   async mounted() {
     let response = await Vue.axios.get("/api/leaderboard");
-    this.allScores = response.data.userList
-    console.log(response.data.userList)
+    this.allScores = response.data.userList;
+    console.log(response.data.userList);
   },
   methods: {
     async onEntry() {
       let response = await Vue.axios.get("/api/leaderboard");
-      this.allScores=response.data.userList
-      console.log(response.data.userList)
-    },
-  },
+      this.allScores = response.data.userList;
+      console.log(response.data.userList);
+    }
+  }
 };
 </script>
 
@@ -54,9 +53,17 @@ export default {
   margin: auto;
   padding: 50px;
 }
+
 .box {
   margin: auto;
 }
-div {width: fit-content; margin: auto; }
+
+div {
+  margin: auto;
+  background-color: #eeeeee;
+  width: 75%;
+  border-radius: 50px;
+  padding-bottom: 5px;
+}
 
 </style>
