@@ -1,9 +1,14 @@
 <template>
   <v-container>
     <div class="text-center">
-      <h1>
-        Credit
-      </h1>
+      <v-img
+          alt="Waiting room Logo"
+          contain
+          class="mt-5"
+          src="@/assets/credit.png"
+          transition="scale-transition"
+          width="500"
+      />
       <h2>
         Team Members
       </h2>
@@ -39,5 +44,5 @@ export default {
 </script>
 
 <style scoped>
-
+div {width: fit-content; margin: auto; }
 </style>

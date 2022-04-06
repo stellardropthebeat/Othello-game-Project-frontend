@@ -77,6 +77,8 @@ export default {
 button {
   margin-bottom: 20px;
   border-radius: 15px;
+  border-bottom: 2px darkgreen solid;
+  box-shadow: 2px 3px black;
 }
 
 </style>
