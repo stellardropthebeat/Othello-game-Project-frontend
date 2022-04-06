@@ -1,8 +1,13 @@
 <template>
   <v-container>
-    <h1>
-      How to play Othello
-    </h1>
+    <v-img
+        alt="Waiting room Logo"
+        contain
+        class="mt-5"
+        src="@/assets/howtoplay.png"
+        transition="scale-transition"
+        width="550"
+    />
     <v-divider></v-divider>
     <v-card-text>
       Othello is a strategy board game for two players (Black and White), played on an 8 by 8 board. The game
