@@ -9,7 +9,7 @@
         width="550"
     />
     <v-divider></v-divider>
-    <v-card-text>
+    <v-card-text class="font-weight-black">
       Othello is a strategy board game for two players (Black and White), played on an 8 by 8 board. The game
       traditionally begins with four discs placed in the middle of the board as shown below. Black moves first.
     </v-card-text>
@@ -21,7 +21,7 @@
       transition="scale-transition"
       width="350"
     />
-    <v-card-text>
+    <v-card-text class="font-weight-black">
       Black must place a black disc on the board, in such a way that there is at least one straight (horizontal,
       vertical, or diagonal) occupied line between the new disc and another black disc, with one or more contiguous
       white pieces between them. In the starting position, Black has the following 4 options indicated by translucent
@@ -31,7 +31,7 @@
     <v-divider>
     </v-divider>
 
-    <v-card-text>
+    <v-card-text class="font-weight-black">
       After placing the disc, Black flips all white discs lying on a straight line between the new disc and any existing
       black discs. All flipped discs are now black. If Black decides to place a disc in the topmost location, one white
       disc gets flipped, and the board now looks like this
@@ -44,7 +44,7 @@
       transition="scale-transition"
       width="350"
     />
-    <v-card-text>
+    <v-card-text class="font-weight-black">
       Now White plays. This player operates under the same rules, with the roles reversed. White lays down a white disc,
       causing black discs to flip. Possibilities at this time would be as shown in the image above.
     </v-card-text>
@@ -52,7 +52,7 @@
     <v-divider>
     </v-divider>
 
-    <v-card-text>
+    <v-card-text class="font-weight-black">
       If White plays the bottom left option and flips one disc.
     </v-card-text>
     <v-img
@@ -63,7 +63,7 @@
       transition="scale-transition"
       width="350"
     />
-    <v-card-text>
+    <v-card-text class="font-weight-black">
       Players alternate taking turns. If a player does not have any valid moves, play passes back to the other player.
       When neither player can move, the game ends. A game of Othello may end before the board is completely filled.
 
@@ -75,14 +75,14 @@
 
     <v-row align="center" justify="space-around">
       <v-col sm="6">
-        <div class="button">
-          <v-btn large block color="blue-grey lighten-5" href="https://en.wikipedia.org/wiki/Reversi">
+        <div class="button ">
+          <v-btn class="font-weight-black" large block color="blue-grey lighten-5" href="https://en.wikipedia.org/wiki/Reversi">
             WIKI
           </v-btn>
         </div>
 
         <div class="button">
-          <v-btn large block color="blue-grey lighten-5" @click="gotoMenu">
+          <v-btn class="font-weight-black" large block color="blue-grey lighten-5" @click="gotoMenu">
             Back to Menu
           </v-btn>
         </div>
@@ -115,6 +115,10 @@ export default {
   margin: auto;
   padding-bottom: 20px;
   padding-top: 20px;
+}
+.container {
+  color: black;
+  font-weight: bolder;
 }
 
 </style>

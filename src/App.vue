@@ -74,3 +74,10 @@ export default {
 };
 </script>
 
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@1,200&display=swap');
+div {
+  font-family: 'Bebas Neue', cursive;
+  font-family: 'Kanit', sans-serif;
+}
+</style>

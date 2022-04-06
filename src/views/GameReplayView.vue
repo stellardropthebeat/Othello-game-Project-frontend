@@ -41,11 +41,9 @@ export default {
       let response = await Vue.axios.post("/api/replay", { "turn": turn, "username": this.$store.state.username });
       this.board = response.data.board;
       this.finished = response.data.finished;
-      this.$forceUpdate();
       this.count();
       turn++;
     }
-    alert("End of Game")
   },
   methods: {
     count() {

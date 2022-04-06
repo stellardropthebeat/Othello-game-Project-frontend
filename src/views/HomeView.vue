@@ -9,24 +9,24 @@
     />
 
     <v-row align="center" justify="space-around">
-      <v-col sm="6">
-          <v-btn large block @click="gotoAbout">
+      <v-col sm="6" >
+          <v-btn large block @click="gotoAbout" class="font-weight-black">
             HOW TO PLAY OTHELLO
           </v-btn>
 
-          <v-btn large block @click="gotoLobby" >
+          <v-btn large block @click="gotoLobby" class="font-weight-black">
             JOIN ROOM
           </v-btn>
 
-          <v-btn large block  @click="gotoReplay">
+          <v-btn large block  @click="gotoReplay" class="font-weight-black">
             REPLAY LATEST GAME
           </v-btn>
 
-          <v-btn large block  @click="gotoLeaderboard">
+          <v-btn large block  @click="gotoLeaderboard" class="font-weight-black">
             LEADERBOARD
           </v-btn>
 
-          <v-btn large block @click="gotoCredit">
+          <v-btn large block @click="gotoCredit" class="font-weight-black">
             CREDIT
           </v-btn>
 
