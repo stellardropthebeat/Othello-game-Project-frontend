@@ -1,9 +1,27 @@
 <template>
   <div>
-    {{ player1 }} <!-- Player1-->
-    {{ player2 }} <!-- Player2-->
-    <button type="button" @click="start">Start Game</button>
-    <button id="leave" class="btn btn-primary" type="button" @click="leave">Leave Lobby</button>
+    <v-img
+        alt="Waiting room Logo"
+        contain
+        class="mt-5"
+        src="@/assets/waiting-room.png"
+        transition="scale-transition"
+        width="500"
+    />
+    <p class="text1">
+      Player1: {{ player1 }} <!-- Player1-->
+    </p>
+    <p class="text2">
+      Waiting for Player2 ... {{ player2 }} <!-- Player2-->
+    </p>
+
+    <v-row align="center">
+        <div class="button">
+          <v-btn small block @click="leave" color="blue-grey lighten-5">
+            Leave Room
+          </v-btn>
+        </div>
+    </v-row>
   </div>
 </template>
 
@@ -19,7 +37,8 @@ export default {
       player1: null,
       player2: null,
       send_message: null,
-      connected: false
+      connected: false,
+      gameStart: false
     };
   },
   async created() {
@@ -41,11 +60,11 @@ export default {
         "username": this.$store.state.username,
         "roomId": this.$store.state.roomId
       });
-      await this.$router.push({path: "/"});
+      //await this.$router.push({path: "/"});
       this.send();
     },
     start() {
-      this.$router.push({ path: "/game" });
+      this.send();
     },
     checkPlayerDisabledButton() {
       return this.player1 === undefined || this.player2 === undefined;
@@ -59,12 +78,16 @@ export default {
           this.connected = true;
           console.log(frame);
           this.stompClient.subscribe("/topic/wait/" + this.$store.state.roomId, tick => {
-            console.log(tick.body);
-            this.player1 = JSON.parse(tick.body)["player1"];
-            this.player2 = JSON.parse(tick.body)["player2"];
-            if(this.player1==null && this.player2==null){
-              this.$router.push({path: "/"})
-            }
+              console.log(tick.body);
+              this.player1 = JSON.parse(tick.body)["player1"];
+              this.player2 = JSON.parse(tick.body)["player2"];
+              this.gameStart = JSON.parse(tick.body)["canStart"];
+              if(this.player1==null && this.player2==null){
+                this.$router.push({path: "/"})
+              }
+              if(this.gameStart){
+                this.$router.push({ path: "/game" });
+              }
           });
         },
         error => {
@@ -94,10 +117,16 @@ export default {
 </script>
 
 <style scoped>
-button {
-  margin: 5px;
-  padding: 5px;
-  color: white;
-  background-color: cadetblue;
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital,wght@1,200&display=swap');
+.button {
+  margin: auto;
+  padding-top: 50px;
 }
+div {width: fit-content; margin: auto; }
+p {font-family: 'Bebas Neue', cursive;
+  font-family: 'Kanit', sans-serif;
+  font-size: 40px;
+  font-weight: bold}
+.text2 {font-weight: bolder;
+  color: violet}
 </style>
