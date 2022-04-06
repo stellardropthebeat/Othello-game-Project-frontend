@@ -14,7 +14,7 @@
         Nutchapol Isariyapruit 6281454
       </v-card-text>
       <v-card-text>
-        Thanthong Chim-ong 6280024
+        Thanthong Chim-ong 6280026
       </v-card-text>
 
       <h2>
