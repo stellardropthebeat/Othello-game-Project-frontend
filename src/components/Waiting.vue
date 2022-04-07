@@ -14,6 +14,7 @@
     <p class="text2">
       Waiting for Player2 ... {{ player2 }} <!-- Player2-->
     </p>
+    <p class="text2" v-if="player2!= null">Game Starting ...</p>
 
     <v-row align="center">
       <div class="button">
@@ -77,7 +78,7 @@ export default {
         frame => {
           this.connected = true;
           console.log(frame);
-          this.stompClient.subscribe("/topic/wait/" + this.$store.state.roomId, tick => {
+          this.stompClient.subscribe("/topic/wait/" + this.$store.state.roomId, async tick => {
             console.log(tick.body);
             this.player1 = JSON.parse(tick.body)["player1"];
             this.player2 = JSON.parse(tick.body)["player2"];
@@ -86,7 +87,8 @@ export default {
               this.$router.push({ path: "/" });
             }
             if (this.gameStart) {
-              this.$router.push({ path: "/game" });
+              await this.sleep(2000)
+              await this.$router.push({ path: "/game" });
             }
           });
         },

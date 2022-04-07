@@ -60,7 +60,7 @@ export default {
 
 div {
   margin: auto;
-  background-color: #eeeeee;
+  background-color: #f5f5f5;
   width: 75%;
   border-radius: 50px;
   padding-bottom: 5px;

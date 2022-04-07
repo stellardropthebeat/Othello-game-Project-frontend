@@ -33,7 +33,7 @@
 
 <style scoped>
 div {
-  background-color: #eeeeee;
+  background-color: #f5f5f5;
   width: 75%;
   margin: auto;
   border-radius: 50px;
