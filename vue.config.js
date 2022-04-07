@@ -2,7 +2,7 @@
 module.exports = {
   transpileDependencies: ["vuetify"],
   devServer: {
-    host: "localhost", //frontend host name
+    host: "128.199.225.250", //frontend host name
     allowedHosts: "all",
     port: 8080, //frontend port
     https: false, //no ssl
