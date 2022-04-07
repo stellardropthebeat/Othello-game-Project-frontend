@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     host: "128.199.225.250", //frontend host name
     allowedHosts: "all",
-    port: 80, //frontend port
+    port: 8080, //frontend port
     https: false, //no ssl
     proxy: {
       "/api": { //proxy every thing from frontend http://localhost:8080/api/** to backend at http://localhost:8081/api/**
