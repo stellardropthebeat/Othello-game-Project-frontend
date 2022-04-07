@@ -17,7 +17,7 @@
           ></v-text-field>
 
           <v-text-field
-              type="paswword"
+              type="password"
               v-model="password"
               :rules="[
                   v => !!v || 'Password is required',
@@ -31,7 +31,7 @@
           ></v-text-field>
 
           <v-text-field
-              type="cpaswword"
+              type="password"
               v-model="cpassword"
               :rules="[
                   v => !!v || 'Confirm Password is required',
