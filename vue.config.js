@@ -9,7 +9,8 @@ module.exports = {
     proxy: {
       "/api": { //proxy every thing from frontend http://localhost:8080/api/** to backend at http://localhost:8081/api/**
         //this is why api path on backend should begin with /api
-        target: "http://localhost:8081",
+        // target: "http://localhost:8081",
+        target: "http://128.199.225.250:8081"
       },
     },
     headers: {

@@ -35,7 +35,7 @@ export default {
       "", "", "", "", "", "", "", "",
       "", "", "", "", "", "", "", ""
     ],
-    possibleMoves: null,
+    possibleMoves: {},
     connected: false,
     turn: 0,
     color: "",
@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     connect() {
-      this.socket = new SockJS("http://localhost:8081/board-socket");
+      this.socket = new SockJS("/api/board-socket");
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
         {},

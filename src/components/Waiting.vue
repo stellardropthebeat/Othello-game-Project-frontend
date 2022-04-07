@@ -52,7 +52,7 @@ export default {
     console.log(this.player1);
     console.log(this.player2);
     this.connect();
-    await this.sleep(50);
+    await this.sleep(1000);
     this.send();
   },
   methods: {
@@ -71,7 +71,7 @@ export default {
       return this.player1 === undefined || this.player2 === undefined;
     },
     connect() {
-      this.socket = new SockJS("http://localhost:8081/waiting-room-socket");
+      this.socket = new SockJS("/api/waiting-room-socket");
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
         {},
@@ -83,12 +83,14 @@ export default {
             this.player1 = JSON.parse(tick.body)["player1"];
             this.player2 = JSON.parse(tick.body)["player2"];
             this.gameStart = JSON.parse(tick.body)["canStart"];
+            console.log(this.player1);
+            console.log(this.player2);
             if (this.player1 == null && this.player2 == null) {
               this.$router.push({ path: "/" });
             }
             if (this.gameStart) {
-              await this.sleep(2000)
-              await this.$router.push({ path: "/game" });
+              // await this.sleep(2000)
+              this.$router.push({ path: "/game" });
             }
           });
         },
