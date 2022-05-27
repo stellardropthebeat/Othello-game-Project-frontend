@@ -1,4 +1,4 @@
-# ssc-y21t2-frontend-team-c
+# Software System Construction (MUIC) Project Team C
 
 ## Project setup
 ```
@@ -20,5 +20,6 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Contributer
+Thanthong Chim-Ong
+Niraporn Kovitaya
